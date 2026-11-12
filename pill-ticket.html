@@ -261,7 +261,7 @@ new MutationObserver(readCols).observe(document.documentElement,{attributes:true
 
 /* ---------- the pool ---------- */
 function inEra(e,v){if(v==='all')return true;if(v==='mystery')return !e.d;if(!e.d)return false;var y=+e.d.slice(0,4),p=v.split('-');return y>=+p[0]&&y<=+p[1]}
-function setEra(v){pool=DATA.filter(function(e){return inEra(e,v)});balls=[];spawnPill(true);for(var i=0;i<29;i++)spawn(true);left()}
+function setEra(v){pool=DATA.filter(function(e){return inEra(e,v)});balls=[];if(typeof taken==='number')taken=0;spawnPill(true);for(var i=0;i<29;i++)spawn(true);left()}
 function pick(){var used={};balls.forEach(function(b){used[key(b.e)]=1});var fresh=pool.filter(function(e){return !pulled[key(e)]&&!used[key(e)]});var from=fresh.length?fresh:pool.filter(function(e){return !used[key(e)]});if(!from.length)from=pool;return from[Math.floor(Math.random()*from.length)]}
 function spawn(scatter){var e=pick();if(!e)return;var r=21+Math.random()*4;balls.push({e:e,r:r,x:HOLE+12+r+Math.random()*(TW-HOLE-24-2*r),y:scatter?TH-r-Math.random()*300:-r-10,vx:(Math.random()-.5)*2,vy:0,a:Math.random()*6.28,c:'#'+(e.col||'ae97e0'),held:false,hole:false,lead:true,mate:null})}
 function left(){var n=balls.filter(function(b){return !b.mate}).length;$('leftn').textContent=n}
@@ -316,7 +316,7 @@ function clawStep(){
   } else if(claw.state==='release'){
     claw.t++;claw.open=Math.min(1,claw.t/8);
     if(claw.t===3&&claw.ball){b=claw.ball;b.held=false;b.hole=true;b.vx=0;b.vy=2;if(b.mate){o=b.mate;o.held=false;o.hole=true;o.vx=0;o.vy=2}}
-    if(claw.ball&&Math.min(claw.ball.y,claw.ball.mate?claw.ball.mate.y:1e9)>TH+claw.ball.r+6){b=claw.ball;claw.ball=null;balls.splice(balls.indexOf(b),1);if(b.mate)balls.splice(balls.indexOf(b.mate),1);claw.state='back';if(b.mate)pillWin(b.e);else win(b.e)}
+    if(claw.ball&&Math.min(claw.ball.y,claw.ball.mate?claw.ball.mate.y:1e9)>TH+claw.ball.r+6){b=claw.ball;claw.ball=null;balls.splice(balls.indexOf(b),1);if(b.mate)balls.splice(balls.indexOf(b.mate),1);claw.state='back';if(b.mate)pillWin(b.e);else{taken++;win(b.e)}}
   } else if(claw.state==='back'){
     claw.x+=4;if(claw.x>=claw.tx||claw.x>=TW/2){claw.state='idle';claw.tx=claw.x;$('drop').disabled=false;if(!hasPill())spawnPill(false);left();if(!balls.some(function(b){return !b.mate})){say('Cleaned out. Reloading the machine.',4000);setTimeout(function(){setEra($('era').value)},1800)}}
   }
@@ -408,8 +408,10 @@ function show(e,fromShelf){
 function win(e){pulled[key(e)]=1;save();count();recent=recent.filter(function(x){return x!==e});recent.unshift(e);recent=recent.slice(0,12);shelf();show(e,false)}
 function count(){var n=0;DATA.forEach(function(e){if(pulled[key(e)])n++});$('count').textContent=n;$('total').textContent=DATA.length}
 function shelf(){var s=$('shelf');s.textContent='';recent.forEach(function(e){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Look again at '+(e.t||'mystery flyer'));var im=new Image();im.alt='';ensure(e).then(function(src){im.src=src});b.appendChild(im);b.addEventListener('click',function(){show(e,true)});s.appendChild(b)});s.hidden=!recent.length;$('empty').hidden=!!recent.length}
-function closePrize(){$('prize').hidden=true;$('pillbox').hidden=true;$('gt').hidden=true;$('card').hidden=false;$('drop').focus()}
-var pillFlyer=null,lastS=-1;
+function closePrize(){$('prize').hidden=true;$('pillbox').hidden=true;$('gt').hidden=true;$('card').hidden=false;$('drop').focus();if(taken>=need)setTimeout(restock,400)}
+var pillFlyer=null,lastS=-1,taken=0,need=5+Math.floor(Math.random()*3);
+function restock(){var n=taken;taken=0;need=5+Math.floor(Math.random()*3);say('Restocking. Stand clear of the chute.',n*240+2500);beep(110,.4,'sawtooth',.04);
+  for(var k=0;k<n;k++)(function(k){setTimeout(function(){spawn(false);left();beep(300+k*40,.07)},500+k*240)})(k)}
 var SURPRISE=[
 ['Fortune','You will lose your friends at 2am and find better ones by the speakers.'],
 ['Fortune','The track you are about to ask the name of will never be released.'],
