@@ -86,7 +86,8 @@ button,select{font:inherit;color:inherit}
 @media (prefers-reduced-motion:reduce){.art img{animation:none}}
 @media (max-width:420px){.deck{gap:10px;padding-inline:12px}.rnd,.shake{width:48px;height:48px}.tank{padding:0 10px}}
 </style>
-<script>(function(){var r=document.documentElement;function set(t){if(t==='dark'||t==='light')r.setAttribute('data-theme',t)}var m=/[?&]theme=(dark|light)/.exec(location.search);if(m)set(m[1]);window.addEventListener('message',function(e){if(e.data&&e.data.rsTheme)set(e.data.rsTheme)})})();</script>
+<style>html.embedded,html.embedded body{background:transparent!important}html.embedded{color-scheme:light!important}html.embedded body{padding-top:8px}</style>
+<script>(function(){var r=document.documentElement,emb=window.top!==window.self;if(emb)r.classList.add('embedded');function set(t){if(t!=='dark'&&t!=='light')return;r.setAttribute('data-theme',t);if(emb)try{window.parent.postMessage({rsThemeAck:t},'*')}catch(e){}}var m=/[?&]theme=(dark|light)/.exec(location.search);if(m)set(m[1]);window.addEventListener('message',function(e){if(e.data&&e.data.rsTheme)set(e.data.rsTheme)})})();</script>
 </head>
 <body>
 
