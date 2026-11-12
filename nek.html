@@ -4,65 +4,111 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Great Nektarios</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=IBM+Plex+Mono:wght@400;500&family=Jost:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a boardwalk fortune-teller cabinet in the logo's print colours sits left with Nek behind the glass; the small print (how it works, the golden ticket, past fortunes) sits right and drops below on phones. */
+/* Layout: the fortune machine is drawn as one of German Bardo's night flyers: navy, teal, lilac, pink and orange in flat blocks with heavy black outlines, a boxed title band, Nek's words in a line-up speech bubble, the ticket as a baggage tag. The small print sits right and drops below on phones. */
 :root{
-  --bg:#FFFFFF; --fg:#0A0A0B; --dim:rgba(10,10,11,.62); --line:rgba(10,10,11,.14); --panel:#F3F3EF; --veil:rgba(255,255,255,.95);
+  --bg:#FFFFFF; --fg:#0A0A0B; --dim:rgba(10,10,11,.66); --line:rgba(10,10,11,.16); --panel:#F4F1EA; --veil:rgba(255,255,255,.95);
+  --glass:#FFFFFF; --grid:rgba(10,10,11,.13); --pop:#AE97E0; --hard:#0A0A0B;
   --ink:#0A0A0B; --paper:#FFFFFF;
-  --cy:#00AEEF; --rd:#ED1C24; --yl:#FFF200; --bl:#2454FF; --gold:#F2B705; --gold-hi:#FFE98A; --velvet:#B0102A; --night-a:#2A1470; --night-b:#0B2350;
-  --skin:#E2AD88; --skin-sh:#C98F6B; --hair-a:#8D8D93; --hair-b:#B9B9BF; --hair-c:#5F5F66; --hair-d:#D8D8DC; --hair-e:#3E3E44;
-  --display:"Bagel Fat One","Arial Black",Impact,sans-serif;
-  --sans:"Jost","Futura","Century Gothic","Trebuchet MS",sans-serif;
+  --pk:#F6B3CB; --li:#AE97E0; --yl:#FFCB2E; --or:#F47B3E; --tl:#27B5A4; --nv:#22203F;
+  --display:"Archivo","Arial Black","Helvetica Neue",Arial,sans-serif;
+  --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --d:24px; --rise:13.86px;
+  --dots:radial-gradient(var(--ink) 1px,transparent 1.5px) 0 0/7px 7px,radial-gradient(var(--ink) 1px,transparent 1.5px) 3.5px 3.5px/7px 7px;
+  --hatch:repeating-linear-gradient(135deg,var(--ink) 0 1.5px,transparent 1.5px 6px);
+  --bars:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 3px,var(--ink) 3px 4px,transparent 4px 7px,var(--ink) 7px 10px,transparent 10px 12px,var(--ink) 12px 13px,transparent 13px 15px);
+  --squig:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cg fill='none' stroke='%230A0A0B' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 14q4-7 8 0t8 0'/%3E%3Cpath d='M48 8l7 9'/%3E%3Cpath d='M40 44q4-7 8 0t8 0t8 0'/%3E%3Cpath d='M12 48l9-5'/%3E%3Cpath d='M26 64l5-7'/%3E%3Cpath d='M58 62l-4-8l8 2'/%3E%3Cpath d='M30 26l6 4l-6 4'/%3E%3C/g%3E%3Cg fill='%230A0A0B'%3E%3Ccircle cx='34' cy='10' r='2'/%3E%3Ccircle cx='8' cy='32' r='2'/%3E%3Ccircle cx='62' cy='30' r='2'/%3E%3C/g%3E%3C/svg%3E");
 }
-@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#050506; --fg:#F2F2EF; --dim:rgba(242,242,239,.64); --line:rgba(242,242,239,.16); --panel:#111114; --veil:rgba(5,5,6,.95); color-scheme:dark } }
-:root[data-theme="dark"]{ --bg:#050506; --fg:#F2F2EF; --dim:rgba(242,242,239,.64); --line:rgba(242,242,239,.16); --panel:#111114; --veil:rgba(5,5,6,.95); color-scheme:dark }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#050506; --fg:#F2F2EF; --dim:rgba(242,242,239,.68); --line:rgba(242,242,239,.18); --panel:#15151A; --veil:rgba(5,5,6,.95); --glass:#22203F; --grid:rgba(255,255,255,.13); --hard:#AE97E0; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#050506; --fg:#F2F2EF; --dim:rgba(242,242,239,.68); --line:rgba(242,242,239,.18); --panel:#15151A; --veil:rgba(5,5,6,.95); --glass:#22203F; --grid:rgba(255,255,255,.13); --hard:#AE97E0; color-scheme:dark }
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html,body{height:auto;margin:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:17px;line-height:1.5;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-button,select{font:inherit;color:inherit}
-:focus-visible{outline:3px solid var(--bl);outline-offset:3px}
-.wrap{max-width:1040px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px 56px;align-items:flex-start;justify-content:center}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16.5px;line-height:1.5;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,select,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--or);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px 64px;align-items:flex-start;justify-content:center}
+.xt{font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;letter-spacing:.01em}
 
-/* ---------- the cabinet ---------- */
-.cab{flex:0 1 420px;min-width:0;width:100%;max-width:420px;color:var(--ink);filter:drop-shadow(-7px 0 0 var(--cy)) drop-shadow(7px 5px 0 var(--yl))}
-.crown{background:var(--rd);border:3px solid var(--ink);border-bottom:0;border-radius:120px 120px 0 0/70px 70px 0 0;padding:26px 18px 10px;text-align:center}
-.crown h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(25px,7.4vw,34px);line-height:1;color:var(--yl);text-shadow:2px 2px 0 var(--ink);letter-spacing:.01em;text-wrap:balance}
-.crown p{margin:6px 0 0;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--paper)}
-.bulbs{display:flex;justify-content:space-between;gap:4px;margin-top:10px}
-.bulbs i{width:11px;height:11px;border-radius:50%;background:var(--gold-hi);border:2px solid var(--ink);animation:bulb 1.6s steps(1) infinite}
+/* ---------- the box: every machine is one flat-colour block, drawn like a flyer, with a hatched side and a lid ---------- */
+.cab{flex:0 1 440px;min-width:0;width:calc(100% - var(--d));max-width:440px;margin:var(--rise) var(--d) 0 0;color:var(--ink);position:relative}
+.cab::before{content:"";position:absolute;left:0;bottom:100%;width:100%;height:var(--rise);background:var(--lid,var(--yl));border:3px solid var(--ink);border-bottom:0;transform:skewX(-60deg);transform-origin:0 100%}
+.cab::after{content:"";position:absolute;left:100%;top:0;width:var(--d);height:100%;background:var(--hatch),var(--side,var(--li));border:3px solid var(--ink);border-left:0;transform:skewY(-30deg);transform-origin:0 0}
+.band{background:var(--top,var(--pk));border:3px solid var(--ink);border-bottom:0;padding:12px;display:flex;gap:6px;align-items:stretch}
+.band>*{margin:0;background:var(--paper);border:2.5px solid var(--ink);padding:8px 10px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.band h1{flex:1 1 auto;font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(20px,6.2vw,28px);line-height:.95;letter-spacing:.005em}
+.band p{flex:0 0 auto;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:10.5px;line-height:1.25;letter-spacing:.08em;text-transform:uppercase}
+.band p b{font-weight:900;font-size:13px;letter-spacing:.02em}
+.band .inv{background:var(--ink);color:var(--paper)}
+
+/* ---------- the paperwork beside it ---------- */
+.side{flex:1 1 320px;min-width:0;max-width:480px;display:flex;flex-direction:column;gap:28px;padding-top:var(--rise)}
+.side h2{margin:0 0 12px;display:inline-block;background:var(--fg);color:var(--bg);padding:6px 10px 5px;font-family:var(--display);font-weight:900;font-stretch:125%;font-size:11px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase}
+.lede{margin:0;font-weight:700;font-size:clamp(20px,2.9vw,26px);line-height:1.18;text-wrap:balance}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:12px}
+.shelf button{padding:0;border:2.5px solid var(--ink);background:var(--panel);aspect-ratio:4/5;overflow:hidden;cursor:pointer;display:block;box-shadow:4px 4px 0 var(--pop);transition:transform .08s,box-shadow .08s}
+.shelf button:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--pop)}
+.shelf img{width:100%;height:100%;object-fit:cover;display:block}
+.empty{margin:0;color:var(--dim);font-size:15px}
+
+/* ---------- the reveal ---------- */
+.prize{position:fixed;inset:0;z-index:20;background:var(--veil);display:grid;place-items:center;overflow:auto;padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.card{width:100%;max-width:940px;display:flex;flex-wrap:wrap;gap:30px 48px;align-items:center;justify-content:center}
+.info{flex:1 1 280px;min-width:0;max-width:420px}
+.src{display:inline-block;margin:0 0 12px;border:2px solid var(--fg);padding:4px 8px 3px;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.src:empty{display:none}
+.info h3{margin:0 0 16px;font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(20px,3.3vw,30px);line-height:1.02;text-wrap:balance;overflow-wrap:anywhere}
+.info dl{margin:0 0 22px;border-top:2.5px solid var(--fg)}
+.info dl div{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:baseline;padding:8px 0 7px;border-bottom:2px solid var(--fg)}
+.info dt{font-family:var(--display);font-weight:900;font-stretch:125%;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+.info dd{margin:0;min-width:0;overflow-wrap:anywhere;font-weight:600}
+.acts{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
+.again{min-height:50px;padding:10px 24px;border:3px solid var(--ink);background:var(--yl);color:var(--ink);font-family:var(--display);font-weight:900;font-stretch:125%;font-size:15px;letter-spacing:.03em;text-transform:uppercase;cursor:pointer;box-shadow:5px 5px 0 var(--hard);transition:transform .06s,box-shadow .06s}
+.again:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--hard)}
+.acts a{font-family:var(--display);font-weight:800;font-stretch:112%;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:inherit;text-underline-offset:4px;text-decoration-thickness:2px}
+@media (max-width:420px){:root{--d:16px;--rise:9.24px}.band{padding:9px}.band p{font-size:9.5px}}
+:root{--gold:#FFCB2E;--velvet:#C2264B}
+.cab{flex-basis:420px;max-width:420px;--top:var(--nv);--lid:var(--or);--side:var(--tl)}
+.band{flex-wrap:wrap}
+.band h1{font-size:clamp(19px,5.8vw,26px)}
+.band p{max-width:118px}
+.bulbs{flex:1 1 100%;background:transparent!important;border:0!important;padding:4px 2px 0!important;display:flex!important;flex-direction:row!important;justify-content:space-between!important;gap:4px}
+.bulbs i{width:11px;height:11px;border-radius:50%;background:var(--yl);border:2px solid var(--ink);box-shadow:0 0 0 1.5px var(--paper);animation:bulb 1.6s steps(1) infinite}
 .bulbs i:nth-child(odd){animation-delay:.8s}
-@keyframes bulb{0%{background:var(--gold-hi)}50%{background:var(--velvet)}}
+@keyframes bulb{0%{background:var(--yl)}50%{background:var(--pk)}}
 .think .bulbs i{animation-duration:.3s}
 .think .bulbs i:nth-child(odd){animation-delay:.15s}
-.glass{position:relative;border:3px solid var(--ink);background:radial-gradient(120% 90% at 50% 30%,var(--night-a),var(--night-b) 78%);overflow:hidden;line-height:0}
+.glass{position:relative;border:3px solid var(--ink);background:radial-gradient(rgba(255,255,255,.2) 1px,transparent 1.5px) 0 0/9px 9px,var(--nv);overflow:hidden;line-height:0}
 .glass svg{display:block;width:100%;height:auto}
-.plate{border:3px solid var(--ink);border-top:0;background:var(--ink);color:var(--yl);padding:12px 16px 14px;min-height:92px}
-.plate small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cy);margin-bottom:4px}
-.plate p{margin:0;font-family:var(--mono);font-size:14px;line-height:1.4;min-height:2.8em}
-.deck{border:3px solid var(--ink);border-top:0;background:var(--yl);padding:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 18px}
-.ask{flex:none;width:112px;height:112px;border-radius:50%;border:3px solid var(--ink);background:var(--rd);color:var(--paper);font-family:var(--display);font-size:21px;line-height:1;cursor:pointer;box-shadow:0 7px 0 var(--ink);transition:transform .08s,box-shadow .08s}
-.ask:active,.ask[disabled]{transform:translateY(5px);box-shadow:0 2px 0 var(--ink)}
-.ask[disabled]{cursor:default;opacity:.85}
+.plate{position:relative;border:3px solid var(--ink);border-top:0;background:var(--paper);color:var(--ink);padding:14px 16px 14px;min-height:96px}
+.plate::before{content:"";position:absolute;left:50%;top:-11px;width:18px;height:18px;margin-left:-9px;background:var(--paper);border-left:3px solid var(--ink);border-top:3px solid var(--ink);transform:rotate(45deg)}
+.plate small{position:relative;display:inline-block;background:var(--ink);color:var(--paper);padding:4px 8px 3px;font-family:var(--display);font-weight:900;font-stretch:125%;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.plate p{margin:0;font-weight:700;font-size:15px;line-height:1.35;min-height:2.7em;border-bottom:2px solid var(--ink);padding-bottom:8px}
+.deck{border:3px solid var(--ink);border-top:0;background:var(--squig),var(--tl);padding:18px 16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 20px}
+.ask{flex:none;width:112px;height:112px;border-radius:50%;border:3px solid var(--ink);background:var(--or);color:var(--ink);font-family:var(--display);font-weight:900;font-stretch:125%;font-size:15px;line-height:1.05;letter-spacing:.02em;text-transform:uppercase;cursor:pointer;box-shadow:5px 5px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.ask:active,.ask[disabled]{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
+.ask[disabled]{cursor:default;background:var(--pk)}
 .opts{display:flex;flex-direction:column;gap:8px;min-width:0}
-.pill{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);padding:5px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.pill{display:inline-flex;align-items:center;gap:8px;border:2.5px solid var(--ink);background:var(--paper);padding:5px 10px;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:10px;letter-spacing:.08em;text-transform:uppercase;box-shadow:3px 3px 0 var(--ink)}
 .pill select,.pill button{border:0;background:transparent;padding:2px 0;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;color:var(--ink)}
-.slot{border:3px solid var(--ink);border-top:0;background:var(--bl);padding:14px 16px 0;height:152px;overflow:hidden}
-.slot .mouth{height:12px;border-radius:6px;background:var(--ink)}
+.slot{border:3px solid var(--ink);border-top:0;background:var(--li);padding:14px 16px 0;height:152px;overflow:hidden}
+.slot .mouth{height:12px;background:var(--ink)}
 .slot .lane{height:126px;overflow:hidden;display:flex;justify-content:center}
-.tick{display:flex;align-items:center;gap:10px;width:86%;height:110px;border:2px solid var(--ink);border-top:0;background:var(--paper);padding:10px 12px;cursor:pointer;text-align:left;transform:translateY(-104%);border-radius:0 0 6px 6px;box-shadow:0 4px 0 var(--ink)}
+.tick{position:relative;display:flex;align-items:center;gap:10px;width:86%;height:110px;border:2.5px solid var(--ink);border-top:0;background:var(--paper);padding:10px 40px 10px 12px;cursor:pointer;text-align:left;transform:translateY(-104%);box-shadow:4px 4px 0 var(--ink)}
+.tick::after{content:"";position:absolute;right:10px;top:10px;bottom:10px;width:20px;background:repeating-linear-gradient(0deg,var(--ink) 0 2px,transparent 2px 3px,var(--ink) 3px 4px,transparent 4px 7px,var(--ink) 7px 10px,transparent 10px 12px,var(--ink) 12px 13px,transparent 13px 15px)}
 .tick.out{transform:translateY(0);animation:print 1.5s linear both,nudge 3.2s ease-in-out 2.2s infinite}
 @keyframes print{0%{transform:translateY(-104%)}12%{transform:translateY(-82%)}18%{transform:translateY(-84%)}32%{transform:translateY(-58%)}38%{transform:translateY(-60%)}54%{transform:translateY(-30%)}60%{transform:translateY(-32%)}80%{transform:translateY(3%)}90%{transform:translateY(-3%)}100%{transform:translateY(0)}}
 @keyframes nudge{0%,86%,100%{transform:translateY(0) rotate(0)}89%{transform:translateY(2px) rotate(-1.4deg)}93%{transform:translateY(0) rotate(1.4deg)}96%{transform:translateY(1px) rotate(-.7deg)}}
-.tick:hover{background:var(--yl)}
-.tick img{flex:none;width:68px;height:86px;object-fit:cover;border:1px solid var(--ink)}
-.tick b{display:block;font-family:var(--display);font-weight:400;font-size:21px;line-height:1.05}
-.tick span span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:3px}
-.tick.gold{background:linear-gradient(110deg,var(--gold),var(--gold-hi) 45%,var(--gold))}
-.base{border:3px solid var(--ink);border-top:0;background:var(--rd);border-radius:0 0 18px 18px;padding:10px 16px;text-align:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--paper)}
+.tick:hover{background:var(--pk)}
+.tick img{flex:none;width:68px;height:86px;object-fit:cover;border:2px solid var(--ink)}
+.tick>span{min-width:0}
+.tick b{display:block;font-family:var(--display);font-weight:900;font-stretch:125%;font-size:14px;line-height:1.05;text-transform:uppercase;overflow-wrap:anywhere}
+.tick span span{display:block;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;margin-top:5px;padding-top:5px;border-top:2px solid var(--ink)}
+.tick.gold,.tick.gold:hover{background:var(--yl)}
+.base{border:3px solid var(--ink);border-top:0;background:var(--nv);padding:11px 16px 10px;text-align:center;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper)}
 
 /* Nek, animated */
 .brow{transform-box:fill-box;transform-origin:center;transition:transform .2s}
@@ -89,100 +135,95 @@ button,select{font:inherit;color:inherit}
 @keyframes tw{from{opacity:.25}to{opacity:1}}
 @media (prefers-reduced-motion: reduce){ .bulbs i,.brow,.jaw,.hand,.swirl,.star,.tick.out{animation:none!important} }
 
-/* ---------- the small print ---------- */
-.side{flex:1 1 340px;min-width:0;max-width:520px;display:flex;flex-direction:column;gap:30px}
-.side h2{margin:0 0 10px;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
-.lede{margin:0;font-size:clamp(21px,3.4vw,27px);line-height:1.25;text-wrap:balance}
+/* the small print */
+.side{max-width:520px;gap:30px}
 .side p{margin:0;max-width:60ch}
 .side p+p{margin-top:8px}
-.goldbox{border:2px solid var(--fg);border-radius:10px;padding:16px 18px;background:var(--panel)}
-.goldbox strong{font-family:var(--display);font-weight:400;font-size:20px;display:block;line-height:1.1;margin-bottom:6px}
-.goldbox .st{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;margin-top:10px}
+.goldbox{position:relative;border:3px solid var(--ink);padding:16px 18px;background:var(--yl);color:var(--ink);box-shadow:6px 6px 0 var(--pop)}
+.goldbox strong{font-family:var(--display);font-weight:900;font-stretch:125%;font-size:17px;text-transform:uppercase;display:block;line-height:1.05;margin-bottom:8px;padding-bottom:8px;border-bottom:2.5px solid var(--ink)}
+.goldbox p{font-weight:500}
+.goldbox .st{font-family:var(--mono);font-weight:500;font-size:12.5px;letter-spacing:.02em;margin-top:10px;background:var(--paper);border:2px solid var(--ink);padding:7px 10px}
 .goldbox .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.btn{border:2px solid var(--fg);background:transparent;border-radius:999px;padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.btn{border:2.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:7px 12px 6px;font-family:var(--display);font-weight:900;font-stretch:112%;font-size:10px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
 .issued{margin:12px 0 0;padding:0;list-style:none;font-family:var(--mono);font-size:12px}
-.issued li{padding:6px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}
-.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px}
-.shelf button{padding:0;border:1px solid var(--line);background:var(--panel);border-radius:4px;aspect-ratio:4/5;overflow:hidden;cursor:pointer;display:block}
-.shelf img{width:100%;height:100%;object-fit:cover;display:block}
-.empty{color:var(--dim);font-size:15px}
-.note{font-family:var(--mono);font-size:12px;color:var(--dim)}
-.side a{color:inherit}
+.issued li{padding:6px 0;border-top:2px solid var(--ink);overflow-wrap:anywhere}
+.note{font-family:var(--display);font-weight:800;font-stretch:112%;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.side a{color:inherit;text-underline-offset:4px;text-decoration-thickness:2px}
 
-/* ---------- the reveal ---------- */
-.prize{position:fixed;inset:0;z-index:20;background:var(--veil);display:grid;place-items:center;overflow:auto;padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
-.card{width:100%;max-width:920px;display:flex;flex-wrap:wrap;gap:28px 44px;align-items:center;justify-content:center}
-.art{flex:0 1 420px;min-width:0;max-width:100%;line-height:0;border:3px solid var(--ink);box-shadow:-8px 0 0 var(--cy),8px 0 0 var(--rd),0 8px 0 var(--yl);background:var(--panel)}
+/* the reveal */
+.art{flex:0 1 420px;min-width:0;max-width:100%;line-height:0;border:3px solid var(--ink);box-shadow:8px 8px 0 var(--pop);background:var(--panel)}
 .art img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain}
-.art .ph{aspect-ratio:4/5;display:grid;place-items:center;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);line-height:1.4;padding:20px;text-align:center}
-.info{flex:1 1 300px;min-width:0;max-width:440px}
-.src{margin:0 0 8px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
-.info h3{margin:0 0 12px;font-family:var(--display);font-weight:400;font-size:clamp(26px,5vw,38px);line-height:1.05;text-wrap:balance;overflow-wrap:anywhere}
-.quote{margin:0 0 16px;padding:12px 14px;background:var(--ink);color:var(--yl);font-family:var(--mono);font-size:13.5px;line-height:1.45;border-radius:4px}
-.quote b{display:block;font-weight:500;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cy);margin-bottom:4px}
-dl{margin:0 0 20px;border-top:1px solid var(--line)}
-dl div{display:flex;gap:14px;padding:9px 0;border-bottom:1px solid var(--line)}
-dt{flex:none;width:62px;padding-top:4px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
-dd{margin:0;min-width:0;overflow-wrap:anywhere}
-.acts{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
-.again{border:3px solid var(--ink);background:var(--yl);color:var(--ink);border-radius:999px;padding:11px 26px;font-family:var(--display);font-size:19px;cursor:pointer;box-shadow:0 5px 0 var(--ink)}
-.again:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
-.acts a{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:inherit}
+.art .ph{aspect-ratio:4/5;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);line-height:1.4;padding:20px;text-align:center}
+.quote{position:relative;margin:0 0 18px;padding:12px 14px;background:var(--paper);color:var(--ink);border:3px solid var(--ink);font-weight:700;font-size:15px;line-height:1.35;box-shadow:5px 5px 0 var(--pop)}
+.quote b{display:block;font-family:var(--display);font-weight:900;font-stretch:125%;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;padding-bottom:5px;border-bottom:2px solid var(--ink)}
 
 /* golden ticket */
-.gt{position:relative;width:100%;max-width:560px;color:var(--ink);background:linear-gradient(115deg,var(--gold) 0%,var(--gold-hi) 38%,var(--gold) 62%,var(--gold-hi) 100%);border:3px solid var(--ink);border-radius:14px;padding:26px 24px 22px;text-align:center;box-shadow:-8px 0 0 var(--cy),8px 0 0 var(--rd),0 8px 0 var(--ink)}
+.gt{position:relative;width:100%;max-width:560px;color:var(--ink);background:var(--yl);border:3px solid var(--ink);padding:22px 24px 46px;text-align:center;box-shadow:8px 8px 0 var(--pop)}
 .gt::before,.gt::after{content:"";position:absolute;top:50%;width:26px;height:26px;margin-top:-13px;border-radius:50%;background:var(--bg);border:3px solid var(--ink)}
 .gt::before{left:-16px}.gt::after{right:-16px}
-.gt .k{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
-.gt h3{margin:8px 0 6px;font-family:var(--display);font-weight:400;font-size:clamp(34px,9vw,54px);line-height:.98}
-.gt p{margin:0 auto;max-width:40ch;font-size:16px}
-.gt .code{display:inline-block;margin:16px 0 6px;padding:8px 16px;border:2px dashed var(--ink);font-family:var(--mono);font-size:clamp(17px,5vw,24px);letter-spacing:.14em;background:var(--paper);user-select:all}
-.gt .fine{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;margin-top:10px}
+.gt .k{display:inline-block;background:var(--paper);border:2.5px solid var(--ink);padding:5px 10px 4px;font-family:var(--display);font-weight:900;font-stretch:112%;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+.gt h3{margin:12px 0 8px;font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(26px,7.4vw,46px);line-height:.95;color:var(--paper);-webkit-text-stroke:2.5px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--ink);text-wrap:balance}
+.gt p{margin:0 auto;max-width:40ch;font-size:16px;font-weight:600}
+.gt .code{display:inline-block;margin:16px 0 6px;padding:9px 16px 8px;border:2.5px solid var(--ink);font-family:var(--mono);font-weight:500;font-size:clamp(17px,5vw,24px);letter-spacing:.14em;background:var(--paper);user-select:all;box-shadow:4px 4px 0 var(--ink)}
+.gt .fine{font-size:12.5px;font-weight:600;margin-top:10px}
 .gt .acts{justify-content:center;margin-top:18px}
-.gt .sample{position:absolute;top:18px;right:-34px;transform:rotate(18deg);background:var(--rd);color:var(--paper);border:2px solid var(--ink);padding:3px 44px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.gt .again{box-shadow:5px 5px 0 var(--ink);background:var(--or)}
+.gt>.bar{position:absolute;left:24px;right:24px;bottom:14px;height:18px;background:var(--bars)}
+.gt .sample{position:absolute;top:18px;right:-34px;transform:rotate(18deg);background:var(--or);color:var(--ink);border:2.5px solid var(--ink);padding:4px 44px 3px;font-family:var(--display);font-weight:900;font-stretch:112%;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
 .gform{display:grid;gap:6px;max-width:340px;margin:16px auto 4px;text-align:left}
-.gform label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase}
-.gform input{font:inherit;font-size:17px;padding:10px 12px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink);width:100%;margin-bottom:6px}
+.gform label{font-family:var(--display);font-weight:900;font-stretch:112%;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.gform input{font:inherit;font-size:17px;padding:10px 12px;border:2.5px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);width:100%;margin-bottom:6px}
 .gform .again{margin-top:6px;justify-self:center}
-.gform #gerr{min-height:1.4em;text-align:center;color:var(--velvet);font-weight:500;margin:4px 0 0}
+.gform #gerr{min-height:1.4em;text-align:center;color:var(--velvet);font-weight:700;margin:4px 0 0}
 #gclose{background:var(--paper)}
-.gtwrap{overflow:hidden;padding:12px 20px 16px;width:100%;display:grid;place-items:center}
+.gtwrap{overflow:hidden;padding:12px 20px 20px;width:100%;display:grid;place-items:center}
 </style>
 <style>html.embedded,html.embedded body{background:transparent!important}html.embedded{color-scheme:light!important}html.embedded body{padding-top:8px}</style>
 <script>(function(){var r=document.documentElement,emb=window.top!==window.self;if(emb)r.classList.add('embedded');function set(t){if(t!=='dark'&&t!=='light')return;r.setAttribute('data-theme',t);if(emb)try{window.parent.postMessage({rsThemeAck:t},'*')}catch(e){}}var m=/[?&]theme=(dark|light)/.exec(location.search);if(m)set(m[1]);window.addEventListener('message',function(e){if(e.data&&e.data.rsTheme)set(e.data.rsTheme)})})();</script>
 </head>
 <body>
 
+
 <main class="wrap">
   <section class="cab" id="cab" aria-label="The Great Nektarios fortune machine">
-    <div class="crown">
-      <h1>The Great Nektarios</h1>
-      <p>Sees all · Remembers most of it</p>
+    <header class="band">
+      <h1>The Great<br>Nektarios</h1>
+      <p class="inv"><b>Sees all</b>Remembers most of it</p>
       <div class="bulbs" id="bulbs" aria-hidden="true"></div>
-    </div>
+    </header>
     <div class="glass">
       <svg viewBox="0 0 320 310" role="img" aria-label="A cartoon of Nek with big grey curls, enormous eyebrows and a grey goatee, hands over a crystal ball">
         <defs>
           <clipPath id="ballclip"><circle cx="160" cy="262" r="33"/></clipPath>
-          <radialGradient id="ballg" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#EAF9FF"/><stop offset="1" stop-color="#7FD4F5"/></radialGradient>
+          
         </defs>
-        <g id="stars" fill="#FFF200"></g>
+        <g id="stars" fill="#FFCB2E"></g>
+        <!-- things adrift in the night -->
+        <g stroke="#0A0A0B" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round">
+          <circle cx="96" cy="58" r="9" fill="#F47B3E"/><ellipse cx="96" cy="58" rx="16" ry="4.5" fill="none" transform="rotate(-20 96 58)"/>
+          <path d="M232 46a11 11 0 1 0 8 18a9 9 0 0 1-8-18z" fill="#FFCB2E"/>
+          <path d="M84 96l5-9l5 9l-5 9z" fill="#F6B3CB"/>
+          <path d="M226 92q4-6 8 0t8 0" fill="none" stroke="#27B5A4" stroke-width="3"/>
+          <path d="M120 34h8v-8h8" fill="none" stroke="#F6B3CB" stroke-width="3"/>
+          <path d="M196 30l3 6l6 3l-6 3l-3 6l-3-6l-6-3l6-3z" fill="#FFFFFF"/>
+        </g>
         <!-- curtains -->
-        <path d="M0 0H74C70 60 44 96 30 150C20 196 26 250 0 310Z" fill="#B0102A" stroke="#0A0A0B" stroke-width="3"/>
-        <path d="M320 0H246C250 60 276 96 290 150C300 196 294 250 320 310Z" fill="#B0102A" stroke="#0A0A0B" stroke-width="3"/>
-        <path d="M22 8C26 70 14 150 8 250M46 6C44 60 30 100 22 150" stroke="#0A0A0B" stroke-opacity=".35" stroke-width="3" fill="none"/>
-        <path d="M298 8C294 70 306 150 312 250M274 6C276 60 290 100 298 150" stroke="#0A0A0B" stroke-opacity=".35" stroke-width="3" fill="none"/>
-        <path d="M0 0H320V18Q300 40 280 18Q260 40 240 18Q220 40 200 18Q180 40 160 18Q140 40 120 18Q100 40 80 18Q60 40 40 18Q20 40 0 18Z" fill="#FFF200" stroke="#0A0A0B" stroke-width="3"/>
+        <path d="M0 0H74C70 60 44 96 30 150C20 196 26 250 0 310Z" fill="#AE97E0" stroke="#0A0A0B" stroke-width="3"/>
+        <path d="M320 0H246C250 60 276 96 290 150C300 196 294 250 320 310Z" fill="#AE97E0" stroke="#0A0A0B" stroke-width="3"/>
+        <path d="M22 8C26 70 14 150 8 250M46 6C44 60 30 100 22 150" stroke="#0A0A0B" stroke-width="1.8" fill="none"/>
+        <path d="M298 8C294 70 306 150 312 250M274 6C276 60 290 100 298 150" stroke="#0A0A0B" stroke-width="1.8" fill="none"/>
+        <path d="M0 0H320V18Q300 40 280 18Q260 40 240 18Q220 40 200 18Q180 40 160 18Q140 40 120 18Q100 40 80 18Q60 40 40 18Q20 40 0 18Z" fill="#F6B3CB" stroke="#0A0A0B" stroke-width="3"/>
         <!-- robe -->
-        <path d="M58 310C58 252 104 226 160 226C216 226 262 252 262 310Z" fill="#2454FF" stroke="#0A0A0B" stroke-width="3"/>
+        <path d="M58 310C58 252 104 226 160 226C216 226 262 252 262 310Z" fill="#27B5A4" stroke="#0A0A0B" stroke-width="3"/>
         <path d="M134 228L160 262L186 228" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M126 230L160 276L194 230" fill="none" stroke="#FFF200" stroke-width="7" stroke-linejoin="round"/>
+        <path d="M126 230L160 276L194 230" fill="none" stroke="#FFCB2E" stroke-width="7" stroke-linejoin="round"/>
         <g id="hairback"></g>
         <!-- ears, neck, head -->
         <rect x="143" y="196" width="34" height="40" rx="10" fill="#C98F6B" stroke="#0A0A0B" stroke-width="3"/>
         <ellipse cx="109" cy="156" rx="9" ry="14" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
         <ellipse cx="211" cy="156" rx="9" ry="14" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
-        <circle cx="214" cy="176" r="7" fill="none" stroke="#F2B705" stroke-width="4"/>
+        <circle cx="214" cy="176" r="7" fill="none" stroke="#FFCB2E" stroke-width="4"/>
         <path d="M110 148C110 104 132 88 160 88C188 88 210 104 210 148C210 186 190 212 160 212C130 212 110 186 110 148Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
         <!-- stubble and goatee -->
         <path d="M114 166C118 192 136 210 160 210C184 210 202 192 206 166C200 184 186 196 160 196C134 196 120 184 114 166Z" fill="#8D8D93" fill-opacity=".38"/>
@@ -204,21 +245,21 @@ dd{margin:0;min-width:0;overflow-wrap:anywhere}
         <path class="brow l" d="M111 135Q131 108 155 129" fill="none" stroke="#0A0A0B" stroke-width="15" stroke-linecap="round"/>
         <path class="brow r" d="M165 129Q189 108 209 135" fill="none" stroke="#0A0A0B" stroke-width="15" stroke-linecap="round"/>
         <!-- headband and jewel -->
-        <path d="M112 116Q160 92 208 116L207 128Q160 105 113 128Z" fill="#FFF200" stroke="#0A0A0B" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M160 96l9 10l-9 10l-9-10z" fill="#ED1C24" stroke="#0A0A0B" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M112 116Q160 92 208 116L207 128Q160 105 113 128Z" fill="#FFCB2E" stroke="#0A0A0B" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M160 96l9 10l-9 10l-9-10z" fill="#F47B3E" stroke="#0A0A0B" stroke-width="2.5" stroke-linejoin="round"/>
         <g id="hairfront"></g>
         <!-- crystal ball -->
-        <path d="M128 310L138 290H182L192 310Z" fill="#F2B705" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/>
-        <circle cx="160" cy="262" r="33" fill="url(#ballg)"/>
+        <path d="M128 310L138 290H182L192 310Z" fill="#F47B3E" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="160" cy="262" r="33" fill="#D4F4EE"/>
         <g clip-path="url(#ballclip)">
-          <g class="swirl"><circle cx="146" cy="250" r="20" fill="#00AEEF" fill-opacity=".75"/><circle cx="176" cy="258" r="18" fill="#ED1C24" fill-opacity=".7"/><circle cx="158" cy="280" r="18" fill="#FFF200" fill-opacity=".8"/></g>
+          <g class="swirl"><circle cx="146" cy="250" r="20" fill="#27B5A4"/><circle cx="176" cy="258" r="18" fill="#F6B3CB"/><circle cx="158" cy="280" r="18" fill="#FFCB2E"/></g>
           <image id="ballimg" x="127" y="229" width="66" height="66" preserveAspectRatio="xMidYMid slice"/>
         </g>
         <circle cx="160" cy="262" r="33" fill="none" stroke="#0A0A0B" stroke-width="3"/>
         <path d="M140 246Q146 236 158 234" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
         <!-- hands -->
-        <g class="hand l"><path d="M70 290C66 268 78 252 96 250C110 248 120 256 122 266L112 270C108 262 100 262 98 268L100 290Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M86 254l-4-12M97 250l0-13M108 252l5-11" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round"/><path d="M60 310L66 284H104L106 310Z" fill="#2454FF" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M66 286H104" stroke="#FFF200" stroke-width="6"/></g>
-        <g class="hand r"><path d="M250 290C254 268 242 252 224 250C210 248 200 256 198 266L208 270C212 262 220 262 222 268L220 290Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M234 254l4-12M223 250l0-13M212 252l-5-11" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round"/><path d="M260 310L254 284H216L214 310Z" fill="#2454FF" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M254 286H216" stroke="#FFF200" stroke-width="6"/></g>
+        <g class="hand l"><path d="M70 290C66 268 78 252 96 250C110 248 120 256 122 266L112 270C108 262 100 262 98 268L100 290Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M86 254l-4-12M97 250l0-13M108 252l5-11" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round"/><path d="M60 310L66 284H104L106 310Z" fill="#27B5A4" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M66 286H104" stroke="#FFCB2E" stroke-width="6"/></g>
+        <g class="hand r"><path d="M250 290C254 268 242 252 224 250C210 248 200 256 198 266L208 270C212 262 220 262 222 268L220 290Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M234 254l4-12M223 250l0-13M212 252l-5-11" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round"/><path d="M260 310L254 284H216L214 310Z" fill="#27B5A4" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M254 286H216" stroke="#FFCB2E" stroke-width="6"/></g>
       </svg>
     </div>
     <div class="plate"><small>Nek says</small><p id="say" aria-live="polite">Loading the past…</p></div>
@@ -291,6 +332,7 @@ dd{margin:0;min-width:0;overflow-wrap:anywhere}
       <div class="fine" id="gmailed" hidden></div>
       <div class="fine" id="ghow">To claim it, screenshot this ticket and message @resolutenyc on Instagram with the code.</div>
       <div class="acts"><button class="again" id="gdl" type="button" hidden>Download ticket</button><button class="again" id="gclose" type="button">Keep playing</button></div>
+      <i class="bar" aria-hidden="true"></i>
     </div>
   </div>
 </div>
@@ -508,17 +550,20 @@ $('gform').addEventListener('submit',function(ev){
 });
 function ticketImage(t){
   var c=document.createElement('canvas'),W=1200,H=630;c.width=W;c.height=H;var x=c.getContext('2d');
-  var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#F2B705');g.addColorStop(.4,'#FFE98A');g.addColorStop(.65,'#F2B705');g.addColorStop(1,'#FFE98A');
-  x.fillStyle='#0A0A0B';x.fillRect(0,0,W,H);x.fillStyle=g;x.fillRect(14,14,W-28,H-28);
-  x.fillStyle='#0A0A0B';[0,W].forEach(function(px){x.beginPath();x.arc(px,H/2,34,0,7);x.fill()});
-  x.textAlign='center';x.fillStyle='#0A0A0B';
-  x.font='500 24px "IBM Plex Mono",Menlo,monospace';x.fillText('R E S O L U T E   ·   A D M I T   T W O',W/2,92);
-  x.font='112px "Bagel Fat One","Arial Black",Impact,sans-serif';x.fillText('Golden Ticket',W/2,218);
-  x.font='500 34px Jost,Futura,"Trebuchet MS",sans-serif';x.fillText((t.name||'You')+' + one friend, any ReSolute event',W/2,290,W-160);
-  x.fillStyle='#FFFFFF';x.fillRect(W/2-290,330,580,116);x.setLineDash([14,10]);x.lineWidth=4;x.strokeStyle='#0A0A0B';x.strokeRect(W/2-290,330,580,116);x.setLineDash([]);
-  x.fillStyle='#0A0A0B';x.font='500 64px "IBM Plex Mono",Menlo,monospace';x.fillText(t.code,W/2,410);
-  x.font='500 26px "IBM Plex Mono",Menlo,monospace';x.fillText('Valid until '+day(t.validUntil)+'  ·  One event, two people',W/2,506);
-  x.font='400 22px Jost,Futura,"Trebuchet MS",sans-serif';x.fillText('Show this at the door. The door team checks the code and marks it used.',W/2,560);
+  var INK='#0A0A0B',D='900 expanded ',F=' Archivo,"Arial Black",Impact,sans-serif',i;
+  x.fillStyle=INK;x.fillRect(0,0,W,H);x.fillStyle='#FFCB2E';x.fillRect(14,14,W-28,H-28);
+  x.fillStyle=INK;[0,W].forEach(function(px){x.beginPath();x.arc(px,H/2,34,0,7);x.fill()});
+  function box(bx,by,bw,bh,fill){x.fillStyle=INK;x.fillRect(bx+8,by+8,bw,bh);x.fillStyle=fill;x.fillRect(bx,by,bw,bh);x.lineWidth=5;x.strokeStyle=INK;x.strokeRect(bx,by,bw,bh)}
+  x.textAlign='center';
+  box(70,50,330,64,'#FFFFFF');box(416,50,330,64,INK);box(762,50,368,64,'#FFFFFF');
+  x.font=D+'26px'+F;x.fillStyle=INK;x.fillText('RESOLUTE',235,93);x.fillStyle='#FFFFFF';x.fillText('ADMIT TWO',581,93);x.fillStyle=INK;x.fillText('ANY EVENT',946,93);
+  x.font=D+'96px'+F;x.lineJoin='round';x.fillStyle=INK;x.fillText('GOLDEN TICKET',W/2+7,229,W-150);x.lineWidth=10;x.strokeStyle=INK;x.strokeText('GOLDEN TICKET',W/2,222,W-150);x.fillStyle='#FFFFFF';x.fillText('GOLDEN TICKET',W/2,222,W-150);
+  x.fillStyle=INK;x.font='700 32px'+F;x.fillText((t.name||'You')+' + one friend, any ReSolute event',W/2,290,W-160);
+  box(W/2-290,326,580,108,'#FFFFFF');
+  x.fillStyle=INK;x.font='500 62px "IBM Plex Mono",Menlo,monospace';x.fillText(t.code,W/2,402);
+  x.font='800 24px'+F;x.fillText('VALID UNTIL '+String(day(t.validUntil)).toUpperCase()+'  ·  ONE EVENT, TWO PEOPLE',W/2,494,W-160);
+  x.font='500 21px'+F;x.fillText('Show this at the door. The door team checks the code and marks it used.',W/2,532,W-160);
+  var bx=70,ws=[6,3,3,9,3,6,3,3,12,3,6,6,3,9,3,3];for(i=0;bx<W-70;i++){var bw=ws[i%ws.length];if(i%2===0)x.fillRect(bx,556,Math.min(bw,W-70-bx),40);bx+=bw}
   return c;
 }
 $('gdl').addEventListener('click',function(){
