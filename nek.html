@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Great Nektarios</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=IBM+Plex+Mono:wght@400;500&family=Jost:wght@400;500&display=swap">
+<style>
+/* Layout: a boardwalk fortune-teller cabinet in the logo's print colours sits left with Nek behind the glass; the small print (how it works, the golden ticket, past fortunes) sits right and drops below on phones. */
+:root{
+  --bg:#FFFFFF; --fg:#0A0A0B; --dim:rgba(10,10,11,.62); --line:rgba(10,10,11,.14); --panel:#F3F3EF; --veil:rgba(255,255,255,.95);
+  --ink:#0A0A0B; --paper:#FFFFFF;
+  --cy:#00AEEF; --rd:#ED1C24; --yl:#FFF200; --bl:#2454FF; --gold:#F2B705; --gold-hi:#FFE98A; --velvet:#B0102A; --night-a:#2A1470; --night-b:#0B2350;
+  --skin:#E2AD88; --skin-sh:#C98F6B; --hair-a:#8D8D93; --hair-b:#B9B9BF; --hair-c:#5F5F66; --hair-d:#D8D8DC; --hair-e:#3E3E44;
+  --display:"Bagel Fat One","Arial Black",Impact,sans-serif;
+  --sans:"Jost","Futura","Century Gothic","Trebuchet MS",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#050506; --fg:#F2F2EF; --dim:rgba(242,242,239,.64); --line:rgba(242,242,239,.16); --panel:#111114; --veil:rgba(5,5,6,.95); color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#050506; --fg:#F2F2EF; --dim:rgba(242,242,239,.64); --line:rgba(242,242,239,.16); --panel:#111114; --veil:rgba(5,5,6,.95); color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:auto;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:17px;line-height:1.5;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--bl);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;display:flex;flex-wrap:wrap;gap:40px 56px;align-items:flex-start;justify-content:center}
+
+/* ---------- the cabinet ---------- */
+.cab{flex:0 1 420px;min-width:0;width:100%;max-width:420px;color:var(--ink);filter:drop-shadow(-7px 0 0 var(--cy)) drop-shadow(7px 5px 0 var(--yl))}
+.crown{background:var(--rd);border:3px solid var(--ink);border-bottom:0;border-radius:120px 120px 0 0/70px 70px 0 0;padding:26px 18px 10px;text-align:center}
+.crown h1{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(25px,7.4vw,34px);line-height:1;color:var(--yl);text-shadow:2px 2px 0 var(--ink);letter-spacing:.01em;text-wrap:balance}
+.crown p{margin:6px 0 0;font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--paper)}
+.bulbs{display:flex;justify-content:space-between;gap:4px;margin-top:10px}
+.bulbs i{width:11px;height:11px;border-radius:50%;background:var(--gold-hi);border:2px solid var(--ink);animation:bulb 1.6s steps(1) infinite}
+.bulbs i:nth-child(odd){animation-delay:.8s}
+@keyframes bulb{0%{background:var(--gold-hi)}50%{background:var(--velvet)}}
+.think .bulbs i{animation-duration:.3s}
+.think .bulbs i:nth-child(odd){animation-delay:.15s}
+.glass{position:relative;border:3px solid var(--ink);background:radial-gradient(120% 90% at 50% 30%,var(--night-a),var(--night-b) 78%);overflow:hidden;line-height:0}
+.glass svg{display:block;width:100%;height:auto}
+.plate{border:3px solid var(--ink);border-top:0;background:var(--ink);color:var(--yl);padding:12px 16px 14px;min-height:92px}
+.plate small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cy);margin-bottom:4px}
+.plate p{margin:0;font-family:var(--mono);font-size:14px;line-height:1.4;min-height:2.8em}
+.deck{border:3px solid var(--ink);border-top:0;background:var(--yl);padding:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 18px}
+.ask{flex:none;width:112px;height:112px;border-radius:50%;border:3px solid var(--ink);background:var(--rd);color:var(--paper);font-family:var(--display);font-size:21px;line-height:1;cursor:pointer;box-shadow:0 7px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.ask:active,.ask[disabled]{transform:translateY(5px);box-shadow:0 2px 0 var(--ink)}
+.ask[disabled]{cursor:default;opacity:.85}
+.opts{display:flex;flex-direction:column;gap:8px;min-width:0}
+.pill{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--ink);border-radius:999px;background:var(--paper);padding:5px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.pill select,.pill button{border:0;background:transparent;padding:2px 0;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;color:var(--ink)}
+.slot{border:3px solid var(--ink);border-top:0;background:var(--bl);padding:14px 16px 0;height:152px;overflow:hidden}
+.slot .mouth{height:12px;border-radius:6px;background:var(--ink)}
+.slot .lane{height:126px;overflow:hidden;display:flex;justify-content:center}
+.tick{display:flex;align-items:center;gap:10px;width:86%;height:110px;border:2px solid var(--ink);border-top:0;background:var(--paper);padding:10px 12px;cursor:pointer;text-align:left;transform:translateY(-104%);border-radius:0 0 6px 6px;box-shadow:0 4px 0 var(--ink)}
+.tick.out{transform:translateY(0);animation:print 1.5s linear both,nudge 3.2s ease-in-out 2.2s infinite}
+@keyframes print{0%{transform:translateY(-104%)}12%{transform:translateY(-82%)}18%{transform:translateY(-84%)}32%{transform:translateY(-58%)}38%{transform:translateY(-60%)}54%{transform:translateY(-30%)}60%{transform:translateY(-32%)}80%{transform:translateY(3%)}90%{transform:translateY(-3%)}100%{transform:translateY(0)}}
+@keyframes nudge{0%,86%,100%{transform:translateY(0) rotate(0)}89%{transform:translateY(2px) rotate(-1.4deg)}93%{transform:translateY(0) rotate(1.4deg)}96%{transform:translateY(1px) rotate(-.7deg)}}
+.tick:hover{background:var(--yl)}
+.tick img{flex:none;width:68px;height:86px;object-fit:cover;border:1px solid var(--ink)}
+.tick b{display:block;font-family:var(--display);font-weight:400;font-size:21px;line-height:1.05}
+.tick span span{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-top:3px}
+.tick.gold{background:linear-gradient(110deg,var(--gold),var(--gold-hi) 45%,var(--gold))}
+.base{border:3px solid var(--ink);border-top:0;background:var(--rd);border-radius:0 0 18px 18px;padding:10px 16px;text-align:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--paper)}
+
+/* Nek, animated */
+.brow{transform-box:fill-box;transform-origin:center;transition:transform .2s}
+.think .brow.l{animation:wagl .34s ease-in-out infinite alternate}
+.think .brow.r{animation:wagr .34s ease-in-out infinite alternate}
+@keyframes wagl{from{transform:translateY(0) rotate(0)}to{transform:translateY(-7px) rotate(-9deg)}}
+@keyframes wagr{from{transform:translateY(-7px) rotate(9deg)}to{transform:translateY(0) rotate(0)}}
+.pupil{transition:fill .3s}
+.think .pupil,.talk .pupil{fill:var(--yl)}
+.jaw{transform-box:fill-box;transform-origin:center top}
+.talk .jaw{animation:jaw .19s ease-in-out infinite alternate}
+@keyframes jaw{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+.hand{transform-box:fill-box;transform-origin:center}
+.think .hand.l{animation:hov .5s ease-in-out infinite alternate}
+.think .hand.r{animation:hov .5s ease-in-out infinite alternate-reverse}
+@keyframes hov{from{transform:translate(0,0) rotate(-5deg)}to{transform:translate(0,-6px) rotate(6deg)}}
+.swirl{transform-box:fill-box;transform-origin:center;animation:spin 9s linear infinite}
+.think .swirl{animation-duration:.7s}
+@keyframes spin{to{transform:rotate(360deg)}}
+#ballimg{opacity:0;transition:opacity .5s}
+.seen #ballimg{opacity:1}
+.star{animation:tw 2.4s ease-in-out infinite alternate}
+.star:nth-child(even){animation-delay:1.1s}
+@keyframes tw{from{opacity:.25}to{opacity:1}}
+@media (prefers-reduced-motion: reduce){ .bulbs i,.brow,.jaw,.hand,.swirl,.star,.tick.out{animation:none!important} }
+
+/* ---------- the small print ---------- */
+.side{flex:1 1 340px;min-width:0;max-width:520px;display:flex;flex-direction:column;gap:30px}
+.side h2{margin:0 0 10px;font-family:var(--mono);font-weight:500;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--dim)}
+.lede{margin:0;font-size:clamp(21px,3.4vw,27px);line-height:1.25;text-wrap:balance}
+.side p{margin:0;max-width:60ch}
+.side p+p{margin-top:8px}
+.goldbox{border:2px solid var(--fg);border-radius:10px;padding:16px 18px;background:var(--panel)}
+.goldbox strong{font-family:var(--display);font-weight:400;font-size:20px;display:block;line-height:1.1;margin-bottom:6px}
+.goldbox .st{font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;margin-top:10px}
+.goldbox .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn{border:2px solid var(--fg);background:transparent;border-radius:999px;padding:6px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer}
+.issued{margin:12px 0 0;padding:0;list-style:none;font-family:var(--mono);font-size:12px}
+.issued li{padding:6px 0;border-top:1px solid var(--line);overflow-wrap:anywhere}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px}
+.shelf button{padding:0;border:1px solid var(--line);background:var(--panel);border-radius:4px;aspect-ratio:4/5;overflow:hidden;cursor:pointer;display:block}
+.shelf img{width:100%;height:100%;object-fit:cover;display:block}
+.empty{color:var(--dim);font-size:15px}
+.note{font-family:var(--mono);font-size:12px;color:var(--dim)}
+.side a{color:inherit}
+
+/* ---------- the reveal ---------- */
+.prize{position:fixed;inset:0;z-index:20;background:var(--veil);display:grid;place-items:center;overflow:auto;padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.card{width:100%;max-width:920px;display:flex;flex-wrap:wrap;gap:28px 44px;align-items:center;justify-content:center}
+.art{flex:0 1 420px;min-width:0;max-width:100%;line-height:0;border:3px solid var(--ink);box-shadow:-8px 0 0 var(--cy),8px 0 0 var(--rd),0 8px 0 var(--yl);background:var(--panel)}
+.art img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain}
+.art .ph{aspect-ratio:4/5;display:grid;place-items:center;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);line-height:1.4;padding:20px;text-align:center}
+.info{flex:1 1 300px;min-width:0;max-width:440px}
+.src{margin:0 0 8px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.info h3{margin:0 0 12px;font-family:var(--display);font-weight:400;font-size:clamp(26px,5vw,38px);line-height:1.05;text-wrap:balance;overflow-wrap:anywhere}
+.quote{margin:0 0 16px;padding:12px 14px;background:var(--ink);color:var(--yl);font-family:var(--mono);font-size:13.5px;line-height:1.45;border-radius:4px}
+.quote b{display:block;font-weight:500;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cy);margin-bottom:4px}
+dl{margin:0 0 20px;border-top:1px solid var(--line)}
+dl div{display:flex;gap:14px;padding:9px 0;border-bottom:1px solid var(--line)}
+dt{flex:none;width:62px;padding-top:4px;font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)}
+dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.acts{display:flex;flex-wrap:wrap;align-items:center;gap:14px 22px}
+.again{border:3px solid var(--ink);background:var(--yl);color:var(--ink);border-radius:999px;padding:11px 26px;font-family:var(--display);font-size:19px;cursor:pointer;box-shadow:0 5px 0 var(--ink)}
+.again:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.acts a{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:inherit}
+
+/* golden ticket */
+.gt{position:relative;width:100%;max-width:560px;color:var(--ink);background:linear-gradient(115deg,var(--gold) 0%,var(--gold-hi) 38%,var(--gold) 62%,var(--gold-hi) 100%);border:3px solid var(--ink);border-radius:14px;padding:26px 24px 22px;text-align:center;box-shadow:-8px 0 0 var(--cy),8px 0 0 var(--rd),0 8px 0 var(--ink)}
+.gt::before,.gt::after{content:"";position:absolute;top:50%;width:26px;height:26px;margin-top:-13px;border-radius:50%;background:var(--bg);border:3px solid var(--ink)}
+.gt::before{left:-16px}.gt::after{right:-16px}
+.gt .k{font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.gt h3{margin:8px 0 6px;font-family:var(--display);font-weight:400;font-size:clamp(34px,9vw,54px);line-height:.98}
+.gt p{margin:0 auto;max-width:40ch;font-size:16px}
+.gt .code{display:inline-block;margin:16px 0 6px;padding:8px 16px;border:2px dashed var(--ink);font-family:var(--mono);font-size:clamp(17px,5vw,24px);letter-spacing:.14em;background:var(--paper);user-select:all}
+.gt .fine{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;margin-top:10px}
+.gt .acts{justify-content:center;margin-top:18px}
+.gt .sample{position:absolute;top:18px;right:-34px;transform:rotate(18deg);background:var(--rd);color:var(--paper);border:2px solid var(--ink);padding:3px 44px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.gtwrap{overflow:hidden;padding:12px 20px 16px;width:100%;display:grid;place-items:center}
+</style>
+<script>(function(){var r=document.documentElement;function set(t){if(t==='dark'||t==='light')r.setAttribute('data-theme',t)}var m=/[?&]theme=(dark|light)/.exec(location.search);if(m)set(m[1]);window.addEventListener('message',function(e){if(e.data&&e.data.rsTheme)set(e.data.rsTheme)})})();</script>
+</head>
+<body>
+
+<main class="wrap">
+  <section class="cab" id="cab" aria-label="The Great Nektarios fortune machine">
+    <div class="crown">
+      <h1>The Great Nektarios</h1>
+      <p>Sees all · Remembers most of it</p>
+      <div class="bulbs" id="bulbs" aria-hidden="true"></div>
+    </div>
+    <div class="glass">
+      <svg viewBox="0 0 320 310" role="img" aria-label="A cartoon of Nek with big grey curls, enormous eyebrows and a grey goatee, hands over a crystal ball">
+        <defs>
+          <clipPath id="ballclip"><circle cx="160" cy="262" r="33"/></clipPath>
+          <radialGradient id="ballg" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#EAF9FF"/><stop offset="1" stop-color="#7FD4F5"/></radialGradient>
+        </defs>
+        <g id="stars" fill="#FFF200"></g>
+        <!-- curtains -->
+        <path d="M0 0H74C70 60 44 96 30 150C20 196 26 250 0 310Z" fill="#B0102A" stroke="#0A0A0B" stroke-width="3"/>
+        <path d="M320 0H246C250 60 276 96 290 150C300 196 294 250 320 310Z" fill="#B0102A" stroke="#0A0A0B" stroke-width="3"/>
+        <path d="M22 8C26 70 14 150 8 250M46 6C44 60 30 100 22 150" stroke="#0A0A0B" stroke-opacity=".35" stroke-width="3" fill="none"/>
+        <path d="M298 8C294 70 306 150 312 250M274 6C276 60 290 100 298 150" stroke="#0A0A0B" stroke-opacity=".35" stroke-width="3" fill="none"/>
+        <path d="M0 0H320V18Q300 40 280 18Q260 40 240 18Q220 40 200 18Q180 40 160 18Q140 40 120 18Q100 40 80 18Q60 40 40 18Q20 40 0 18Z" fill="#FFF200" stroke="#0A0A0B" stroke-width="3"/>
+        <!-- robe -->
+        <path d="M58 310C58 252 104 226 160 226C216 226 262 252 262 310Z" fill="#2454FF" stroke="#0A0A0B" stroke-width="3"/>
+        <path d="M134 228L160 262L186 228" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M126 230L160 276L194 230" fill="none" stroke="#FFF200" stroke-width="7" stroke-linejoin="round"/>
+        <g id="hairback"></g>
+        <!-- ears, neck, head -->
+        <rect x="143" y="196" width="34" height="40" rx="10" fill="#C98F6B" stroke="#0A0A0B" stroke-width="3"/>
+        <ellipse cx="109" cy="156" rx="9" ry="14" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
+        <ellipse cx="211" cy="156" rx="9" ry="14" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
+        <circle cx="214" cy="176" r="7" fill="none" stroke="#F2B705" stroke-width="4"/>
+        <path d="M110 148C110 104 132 88 160 88C188 88 210 104 210 148C210 186 190 212 160 212C130 212 110 186 110 148Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
+        <!-- stubble and goatee -->
+        <path d="M114 166C118 192 136 210 160 210C184 210 202 192 206 166C200 184 186 196 160 196C134 196 120 184 114 166Z" fill="#8D8D93" fill-opacity=".38"/>
+        <path d="M133 181C142 172 152 174 160 177C168 174 178 172 187 181C192 198 182 216 160 218C138 216 128 198 133 181Z" fill="#9A9AA0" stroke="#0A0A0B" stroke-width="2.5"/>
+        <path d="M140 200l3 7M150 205l1 8M160 206v8M170 205l-1 8M180 200l-3 7" stroke="#5F5F66" stroke-width="1.6" stroke-linecap="round"/>
+        <!-- mouth -->
+        <ellipse class="jaw" cx="160" cy="194" rx="13" ry="7" fill="#5A0E1C" stroke="#0A0A0B" stroke-width="2.5" style="transform:scaleY(.25)"/>
+        <path d="M142 185Q160 200 178 185" fill="none" stroke="#0A0A0B" stroke-width="3.2" stroke-linecap="round"/>
+        <!-- nose -->
+        <path d="M161 142C157 160 148 168 153 174Q160 180 169 174" fill="none" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- eyes -->
+        <ellipse cx="136" cy="150" rx="11" ry="6.5" fill="#FFFFFF" stroke="#0A0A0B" stroke-width="2.5"/>
+        <ellipse cx="184" cy="150" rx="11" ry="6.5" fill="#FFFFFF" stroke="#0A0A0B" stroke-width="2.5"/>
+        <circle class="pupil" cx="137" cy="150" r="5.5" fill="#3B2314" stroke="#0A0A0B" stroke-width="1.5"/>
+        <circle class="pupil" cx="183" cy="150" r="5.5" fill="#3B2314" stroke="#0A0A0B" stroke-width="1.5"/>
+        <path d="M124 147Q136 140 148 147M172 147Q184 140 196 147" fill="none" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round"/>
+        <path d="M127 161Q136 165 145 161M175 161Q184 165 193 161" fill="none" stroke="#C98F6B" stroke-width="2" stroke-linecap="round"/>
+        <!-- the eyebrows -->
+        <path class="brow l" d="M111 135Q131 108 155 129" fill="none" stroke="#0A0A0B" stroke-width="15" stroke-linecap="round"/>
+        <path class="brow r" d="M165 129Q189 108 209 135" fill="none" stroke="#0A0A0B" stroke-width="15" stroke-linecap="round"/>
+        <!-- headband and jewel -->
+        <path d="M112 116Q160 92 208 116L207 128Q160 105 113 128Z" fill="#FFF200" stroke="#0A0A0B" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M160 96l9 10l-9 10l-9-10z" fill="#ED1C24" stroke="#0A0A0B" stroke-width="2.5" stroke-linejoin="round"/>
+        <g id="hairfront"></g>
+        <!-- crystal ball -->
+        <path d="M128 310L138 290H182L192 310Z" fill="#F2B705" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/>
+        <circle cx="160" cy="262" r="33" fill="url(#ballg)"/>
+        <g clip-path="url(#ballclip)">
+          <g class="swirl"><circle cx="146" cy="250" r="20" fill="#00AEEF" fill-opacity=".75"/><circle cx="176" cy="258" r="18" fill="#ED1C24" fill-opacity=".7"/><circle cx="158" cy="280" r="18" fill="#FFF200" fill-opacity=".8"/></g>
+          <image id="ballimg" x="127" y="229" width="66" height="66" preserveAspectRatio="xMidYMid slice"/>
+        </g>
+        <circle cx="160" cy="262" r="33" fill="none" stroke="#0A0A0B" stroke-width="3"/>
+        <path d="M140 246Q146 236 158 234" fill="none" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+        <!-- hands -->
+        <g class="hand l"><path d="M70 290C66 268 78 252 96 250C110 248 120 256 122 266L112 270C108 262 100 262 98 268L100 290Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M86 254l-4-12M97 250l0-13M108 252l5-11" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round"/><path d="M60 310L66 284H104L106 310Z" fill="#2454FF" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M66 286H104" stroke="#FFF200" stroke-width="6"/></g>
+        <g class="hand r"><path d="M250 290C254 268 242 252 224 250C210 248 200 256 198 266L208 270C212 262 220 262 222 268L220 290Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M234 254l4-12M223 250l0-13M212 252l-5-11" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round"/><path d="M260 310L254 284H216L214 310Z" fill="#2454FF" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M254 286H216" stroke="#FFF200" stroke-width="6"/></g>
+      </svg>
+    </div>
+    <div class="plate"><small>Nek says</small><p id="say" aria-live="polite">Loading the past…</p></div>
+    <div class="deck">
+      <button class="ask" id="ask" type="button" disabled>Ask Nek</button>
+      <div class="opts">
+        <label class="pill" for="era">Years
+          <select id="era">
+            <option value="all">all of them</option>
+            <option value="2008-2012">2008 – 2012</option>
+            <option value="2013-2016">2013 – 2016</option>
+            <option value="2017-2019">2017 – 2019</option>
+            <option value="2020-2022">2020 – 2022</option>
+            <option value="2023-2099">2023 – now</option>
+          </select>
+        </label>
+        <span class="pill"><button id="snd" type="button" aria-pressed="false">Sound off</button></span>
+      </div>
+    </div>
+    <div class="slot"><div class="mouth"></div><div class="lane"><button class="tick" id="tick" type="button" tabindex="-1" aria-hidden="true"><img id="tickimg" alt=""><span><b id="tickt">Your fortune</b><span id="ticks">Tap to read it</span></span></button></div></div>
+    <div class="base">No coins · Nek works for free</div>
+  </section>
+
+  <section class="side">
+    <div>
+      <h2>How it works</h2>
+      <p class="lede">Press the button. Nek looks into the ball and tells you which ReSolute night you were at, whether you were or not.</p>
+    </div>
+    <div class="goldbox" hidden>
+      <strong>The golden ticket</strong>
+      <p>One golden ticket hides in the machine each week. It gets you and a friend into any ReSolute event for the next 365 days. Once somebody pulls it, the machine goes seven days before another one can appear.</p>
+      <p class="st" id="goldst">Checking the ticket drawer…</p>
+      <div class="row" id="goldrow"><button class="btn" id="gprev" type="button">See a sample ticket</button><button class="btn" id="gmine" type="button" hidden>Show my ticket</button><button class="btn" id="greset" type="button" hidden>Reset the 7 days</button></div>
+      <ul class="issued" id="issued" hidden></ul>
+    </div>
+    <div>
+      <h2>Your fortunes so far (<span id="count">0</span> of <span id="total">0</span>)</h2>
+      <div class="shelf" id="shelf"></div>
+      <p class="empty" id="noshelf">Nothing yet. The last twelve flyers Nek hands you will sit here.</p>
+    </div>
+    <p class="note">Rather grab one yourself? <a href="https://www.resolutenyc.com/flyer-machine" target="_top">Try the claw machine ↗</a></p>
+  </section>
+</main>
+
+<div class="prize" id="prize" role="dialog" aria-modal="true" aria-labelledby="ptitle" hidden>
+  <div class="card" id="pcard">
+    <div class="art" id="art"></div>
+    <div class="info">
+      <p class="src" id="psrc"></p>
+      <h3 id="ptitle"></h3>
+      <p class="quote"><b>Nek says</b><span id="pquote"></span></p>
+      <dl id="pmeta"></dl>
+      <div class="acts"><button class="again" id="again" type="button">Ask again</button><a id="plink" target="_blank" rel="noopener" hidden></a></div>
+    </div>
+  </div>
+  <div class="gtwrap" id="gwrap" hidden>
+    <div class="gt">
+      <span class="sample" id="gsample" hidden>Sample · not valid</span>
+      <div class="k">ReSolute · Admit two</div>
+      <h3 id="gtitle">Golden ticket</h3>
+      <p>Nek has spoken. You and one friend are on the list for any ReSolute event you choose.</p>
+      <div class="code" id="gcode">RS-0000-0000</div>
+      <div class="fine" id="gfine"></div>
+      <div class="fine">To claim it, screenshot this ticket and message @resolutenyc on Instagram with the code.</div>
+      <div class="acts"><button class="again" id="gclose" type="button">Keep playing</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id)};
+var NS='http://www.w3.org/2000/svg';
+var WEEK=7*864e5, YEAR=365*864e5, ODDS=1/40;
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var DATA=[],bundles={},pulled={},recent=[],busy=false,sound=false,ac=null,era='all',lastShown=null;
+try{pulled=JSON.parse(localStorage.getItem('rs-nek-pulled')||'{}')||{}}catch(e){}
+function save(){try{localStorage.setItem('rs-nek-pulled',JSON.stringify(pulled))}catch(e){}}
+function key(e){return e.s+'|'+(e.u||'')+'|'+e.b+'.'+e.i}
+
+/* ---------- draw the curls, stars and bulbs ---------- */
+function rng(s){return function(){s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296}}
+function el(n,a){var x=document.createElementNS(NS,n);for(var k in a)x.setAttribute(k,a[k]);return x}
+var HAIR=['#8D8D93','#B9B9BF','#5F5F66','#D8D8DC','#9C9CA2','#3E3E44','#C6C6CB','#77777D'];
+function curls(g,n,a0,a1,r0,r1,s0,s1,seed){
+  var R=rng(seed),list=[];
+  for(var i=0;i<n;i++){var t=n>1?i/(n-1):.5,a=(a0+(a1-a0)*t+(R()-.5)*8)*Math.PI/180,rad=r0+(r1-r0)*R();list.push({x:160+Math.cos(a)*rad*1.08,y:146-Math.sin(a)*rad,r:s0+(s1-s0)*R(),c:HAIR[Math.floor(R()*HAIR.length)],k:R()})}
+  list.sort(function(p,q){return p.k-q.k});
+  list.forEach(function(p){
+    g.appendChild(el('circle',{cx:p.x.toFixed(1),cy:p.y.toFixed(1),r:p.r.toFixed(1),fill:p.c,stroke:'#0A0A0B','stroke-width':2.4}));
+    var q=p.r*.5;g.appendChild(el('path',{d:'M'+(p.x-q).toFixed(1)+' '+p.y.toFixed(1)+'a'+q.toFixed(1)+' '+q.toFixed(1)+' 0 1 1 '+(q*1.1).toFixed(1)+' '+(q*.7).toFixed(1),fill:'none',stroke:'#0A0A0B','stroke-opacity':.5,'stroke-width':1.6,'stroke-linecap':'round'}));
+  });
+}
+curls($('hairback'),34,-22,202,60,92,13,20,7);
+curls($('hairback'),20,5,175,52,70,12,17,21);
+curls($('hairfront'),12,28,152,50,58,9,13,4);
+(function(){var R=rng(11),g=$('stars');for(var i=0;i<16;i++){var x=80+R()*160,y=30+R()*60,s=1.2+R()*2.2;g.appendChild(el('circle',{cx:x.toFixed(0),cy:y.toFixed(0),r:s.toFixed(1),'class':'star'}))}})();
+(function(){var b=$('bulbs');for(var i=0;i<13;i++)b.appendChild(document.createElement('i'))})();
+
+/* ---------- helpers ---------- */
+function beep(f,d,type,g){if(!sound)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();var o=ac.createOscillator(),v=ac.createGain();o.type=type||'triangle';o.frequency.value=f;v.gain.value=g||.05;v.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.connect(v);v.connect(ac.destination);o.start();o.stop(ac.currentTime+d)}catch(e){}}
+function wait(ms){return new Promise(function(r){setTimeout(r,reduce?Math.min(ms,250):ms)})}
+var typing=0;
+function say(s,type){var p=$('say'),my=++typing;if(!type||reduce){p.textContent=s;return Promise.resolve()}
+  p.textContent='';return new Promise(function(done){var i=0;(function step(){if(my!==typing)return done();i+=2;p.textContent=s.slice(0,i);if(i%6===0)beep(300+Math.random()*120,.04,'square',.025);if(i<s.length)setTimeout(step,28);else done()})()})}
+function ensure(e){var n=('00'+e.b).slice(-3);if(!bundles[n])bundles[n]=fetch('b'+n+'.json').then(function(r){if(!r.ok)throw new Error(r.status);return r.json()});return bundles[n].then(function(a){return 'data:image/jpeg;base64,'+a[e.i]})}
+function when(d){if(/^\d{4}$/.test(d))return d;try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}catch(x){return d}}
+function day(ms){return new Date(ms).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+function inEra(e,v){if(v==='all')return true;if(!e.d)return false;var y=+e.d.slice(0,4),p=v.split('-');return y>=+p[0]&&y<=+p[1]}
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+var SRC={ra:'From Resident Advisor',fb:'From Facebook',site:'From the old website',ig:'From Instagram'};
+var IDLE=['Ask Nek what night it was.','The eyebrows are warmed up.','Nek remembers every party. Mostly.','Step up. The ball is clear tonight.'];
+
+/* ---------- fortunes ---------- */
+function fortune(e){
+  var y=e.d?e.d.slice(0,4):'',v=e.v||'',a=e.a&&e.a.length?e.a[0]:'',c=e.c||'',L=[];
+  if(y&&v)L.push('I see '+y+'. I see '+v+'. I see you telling the door you are on the list.');
+  if(a)L.push(a+' played. You remember the first hour very clearly.');
+  if(a)L.push('You said you would leave after '+a+'. You did not.');
+  if(a)L.push(a+' went long that night. Nobody complained.');
+  if(v)L.push('You lost a jacket at '+v+'. It is still there.');
+  if(v)L.push('The ball is cloudy. Probably the smoke machine at '+v+'.');
+  if(!v)L.push('The location was secret. You found it anyway. Eventually.');
+  if(c)L.push('A night in '+c+'. Somebody said one more at 6am. It was you.');
+  if(y)L.push('The eyebrows say '+y+'. You stayed until the lights came on.');
+  if(y)L.push('In '+y+' this flyer was taped to a wall somewhere. Now it is yours.');
+  if(y)L.push('Sunday morning, '+y+'. You are fine. Drink some water.');
+  L.push('I knew you would get this one. I know everything.');
+  return pick(L);
+}
+
+/* ---------- the reveal ---------- */
+function row(k,v){var d=document.createElement('div'),a=document.createElement('dt'),b=document.createElement('dd');a.textContent=k;b.textContent=v;d.appendChild(a);d.appendChild(b);return d}
+function show(e,quote){
+  lastShown={e:e,q:quote};
+  $('gwrap').hidden=true;$('pcard').hidden=false;
+  var art=$('art');art.textContent='';var ph=document.createElement('div');ph.className='ph';ph.textContent='Unrolling the flyer';art.appendChild(ph);
+  ensure(e).then(function(src){var im=new Image();im.alt=(e.t||'ReSolute flyer')+(e.d?', '+when(e.d):'');im.onload=function(){art.textContent='';art.appendChild(im)};im.src=src}).catch(function(){ph.textContent='The flyer got stuck in the slot. Close this and ask again.'});
+  $('psrc').textContent=SRC[e.s]||'';
+  $('ptitle').textContent=e.t||'Mystery flyer';
+  $('pquote').textContent=quote;
+  var m=$('pmeta');m.textContent='';
+  m.appendChild(row('When',e.d?when(e.d):'Date lost to the night'));
+  m.appendChild(row('Where',[e.v||'Secret location',e.c].filter(Boolean).join(', ')));
+  m.appendChild(row('Who',e.a&&e.a.length?e.a.join(', '):'Line-up kept quiet'));
+  var l=$('plink');if(e.u){l.href=e.u;l.textContent=/ra\.co/.test(e.u)?'Event on RA ↗':/facebook/.test(e.u)?'Event on Facebook ↗':'See the post ↗';l.hidden=false}else l.hidden=true;
+  $('prize').hidden=false;$('again').focus();
+}
+function showGold(t,sample){
+  $('pcard').hidden=true;$('gwrap').hidden=false;
+  $('gsample').hidden=!sample;
+  $('gcode').textContent=t.code;
+  $('gfine').textContent='Won '+day(t.wonAt)+' · Valid until '+day(t.validUntil)+' · Good for one event, two people';
+  $('prize').hidden=false;$('gclose').focus();
+}
+function closePrize(){$('prize').hidden=true;$('ask').focus()}
+$('again').addEventListener('click',function(){closePrize();ask()});
+$('gclose').addEventListener('click',closePrize);
+$('prize').addEventListener('click',function(ev){if(ev.target===this)closePrize()});
+document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&!$('prize').hidden)closePrize()});
+$('tick').addEventListener('click',function(){if(this.classList.contains('gold')&&myTicket)showGold(myTicket,false);else if(lastShown)show(lastShown.e,lastShown.q)});
+
+function shelf(){var s=$('shelf');s.textContent='';$('noshelf').hidden=recent.length>0;recent.forEach(function(r){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Look again at '+(r.e.t||'mystery flyer'));var im=new Image();im.alt='';ensure(r.e).then(function(src){im.src=src});b.appendChild(im);b.addEventListener('click',function(){show(r.e,r.q)});s.appendChild(b)})}
+function count(){var n=0;DATA.forEach(function(e){if(pulled[key(e)])n++});$('count').textContent=n;$('total').textContent=DATA.length}
+
+/* ---------- asking ---------- */
+function setTick(gold,src,title,sub){var t=$('tick');t.classList.remove('out');t.classList.toggle('gold',!!gold);$('tickimg').hidden=!src;if(src)$('tickimg').src=src;$('tickt').textContent=title;$('ticks').textContent=sub;void t.offsetWidth;t.classList.add('out');t.tabIndex=0;t.removeAttribute('aria-hidden');t.setAttribute('aria-label',title+'. '+sub);for(var i=0;i<9;i++)(function(i){setTimeout(function(){beep(140+(i%2)*30,.05,'square',.03)},i*140)})(i);try{$('tick').parentNode.parentNode.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})}catch(x){}}
+function ask(){
+  if(busy||!DATA.length)return;busy=true;$('ask').disabled=true;
+  var cab=$('cab'),pool=DATA.filter(function(e){return inEra(e,era)});
+  var fresh=pool.filter(function(e){return !pulled[key(e)]});
+  var e=pick(fresh.length?fresh:pool),q=fortune(e),img=ensure(e).catch(function(){return ''});
+  var gold=tryGolden().catch(function(){return null});
+  $('tick').classList.remove('out');cab.classList.remove('seen');cab.classList.add('think');
+  say(pick(['Nek consults the eyebrows…','The ball is warming up…','Nek squints at the past…','Searching nineteen years of nights…']));
+  beep(220,.5,'sine',.05);setTimeout(function(){beep(330,.5,'sine',.05)},350);setTimeout(function(){beep(440,.6,'sine',.05)},700);
+  Promise.all([img,gold,wait(1700)]).then(function(r){
+    var src=r[0],won=r[1];
+    cab.classList.remove('think');
+    if(won){
+      cab.classList.add('talk');
+      return say('Hold on. The ball has turned gold. This one is not a flyer.',true).then(function(){return wait(500)}).then(function(){
+        cab.classList.remove('talk');setTick(true,'','Golden ticket','Tap to open it');
+        beep(660,.12);setTimeout(function(){beep(880,.12)},120);setTimeout(function(){beep(1320,.12)},240);setTimeout(function(){beep(1760,.4)},360);
+        return wait(1500)});
+    }
+    if(src){$('ballimg').setAttribute('href',src);cab.classList.add('seen')}
+    cab.classList.add('talk');
+    return say(q,true).then(function(){return wait(450)}).then(function(){
+      cab.classList.remove('talk');
+      pulled[key(e)]=1;save();count();
+      recent=recent.filter(function(x){return x.e!==e});recent.unshift({e:e,q:q});recent=recent.slice(0,12);shelf();
+      lastShown={e:e,q:q};setTick(false,src,'Your fortune','Tap to read it');beep(660,.09);setTimeout(function(){beep(990,.16)},100);
+      return wait(1500)});
+  }).catch(function(){say('The machine jammed. Press the button again.')}).then(function(){busy=false;$('ask').disabled=false});
+}
+$('ask').addEventListener('click',ask);
+$('era').addEventListener('change',function(){era=this.value;var n=DATA.filter(function(e){return inEra(e,era)}).length;say('Nek narrows it to '+this.options[this.selectedIndex].text+'. '+n+' nights in there.')});
+$('snd').addEventListener('click',function(){sound=!sound;this.textContent=sound?'Sound on':'Sound off';this.setAttribute('aria-pressed',sound?'true':'false');if(sound)beep(880,.1)});
+
+/* ---------- the golden ticket (shared between everyone using the machine) ---------- */
+var db=null,user=null,uid=null,canWrite=false,isAdmin=false,gstate=null,gknown=false,myTicket=null,holder='t'+Math.random().toString(36).slice(2);
+try{myTicket=JSON.parse(localStorage.getItem('rs-nek-ticket')||'null')}catch(e){}
+function code(){var A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='',b=new Uint8Array(8);(window.crypto||{getRandomValues:function(x){for(var i=0;i<x.length;i++)x[i]=Math.random()*256}}).getRandomValues(b);for(var i=0;i<8;i++)s+=A[b[i]%A.length];return 'RS-'+s.slice(0,4)+'-'+s.slice(4)}
+function left(ms){var d=Math.floor(ms/864e5),h=Math.ceil((ms-d*864e5)/36e5);if(h===24){d++;h=0}return (d?d+(d===1?' day':' days'):'')+(d&&h?' ':'')+(h?h+(h===1?' hour':' hours'):'')||'under an hour'}
+function goldStatus(){
+  var s=$('goldst');
+  $('gmine').hidden=!(myTicket&&myTicket.validUntil>Date.now());
+  $('greset').hidden=!isAdmin;
+  if(!db){s.textContent='The golden ticket is switched off in this view. It only drops for people signed in with the ReSolute team.';return}
+  if(!gknown){s.textContent='Checking the ticket drawer…';return}
+  var wonAt=gstate&&gstate.wonAt||0,gap=wonAt+WEEK-Date.now();
+  if(gap>0)s.textContent='This week’s ticket was pulled on '+day(wonAt)+'. The next one can appear in '+left(gap)+'.';
+  else s.textContent=canWrite?'A golden ticket is in the machine right now. Every press has a 1 in '+Math.round(1/ODDS)+' chance.':'A golden ticket is in the machine, but your access is view-only so it cannot drop for you.';
+}
+function tryGolden(){
+  if(!db||!canWrite||!uid||!gknown)return Promise.resolve(null);
+  if(gstate&&gstate.wonAt&&Date.now()-gstate.wonAt<WEEK)return Promise.resolve(null);
+  if(Math.random()>=ODDS)return Promise.resolve(null);
+  var ref=db.doc('machine/golden');
+  return ref.acquire({holder:holder,ttlMs:8000}).then(function(l){
+    if(!l||!l.acquired)return null;
+    return ref.get().then(function(snap){
+      var d=snap.exists?snap.data():null;
+      if(d&&d.wonAt&&Date.now()-d.wonAt<WEEK)return null;
+      var now=Date.now(),t={code:code(),wonAt:now,validUntil:now+YEAR};
+      return ref.set({wonAt:now}).then(function(){return db.doc('tickets/'+uid).set(t)}).then(function(){
+        myTicket=t;try{localStorage.setItem('rs-nek-ticket',JSON.stringify(t))}catch(e){}
+        goldStatus();return t});
+    });
+  });
+}
+function listIssued(){
+  if(!db||!isAdmin)return;
+  db.collection('tickets').onSnapshot(function(qs){
+    var ul=$('issued'),docs=qs.docs||[];ul.textContent='';ul.hidden=!docs.length;
+    docs.map(function(d){return d.data()||{}}).sort(function(a,b){return (b.wonAt||0)-(a.wonAt||0)}).forEach(function(t){var li=document.createElement('li');li.textContent=(t.code||'?')+' · won '+day(t.wonAt||0)+' · valid until '+day(t.validUntil||0);ul.appendChild(li)});
+  },function(){});
+}
+$('gprev').addEventListener('click',function(){var n=Date.now();showGold({code:'RS-NEKS-EYES',wonAt:n,validUntil:n+YEAR},true)});
+$('gmine').addEventListener('click',function(){if(myTicket)showGold(myTicket,false)});
+$('greset').addEventListener('click',function(){if(!db||!isAdmin)return;var b=this;b.disabled=true;db.doc('machine/golden').set({wonAt:0}).then(function(){say('The drawer is reloaded. A golden ticket is back in play.')},function(){say('Could not reset the clock. Try again in a moment.')}).then(function(){b.disabled=false})});
+goldStatus();
+(function(){
+  if(!window.claude||!window.claude.use){return}
+  Promise.all([window.claude.use('db'),window.claude.use('user')]).then(function(r){
+    db=r[0];user=r[1];
+    if(!db){goldStatus();return}
+    var timer=setTimeout(function(){if(!gknown)$('goldst').textContent='The ticket drawer is not answering yet. Flyers still work.'},10000);
+    db.doc('machine/golden').onSnapshot(function(snap){if(snap.metadata&&snap.metadata.fromCache&&!snap.exists)return;clearTimeout(timer);gknown=true;gstate=snap.exists?snap.data():null;goldStatus()},function(){clearTimeout(timer);db=null;goldStatus()});
+    if(!user)return;
+    Promise.all([user.id(),user.can('data.write'),user.canEdit()]).then(function(x){uid=x[0];canWrite=x[1]!==false&&!!uid;isAdmin=!!x[2];goldStatus();listIssued()});
+  },function(){goldStatus()});
+})();
+setInterval(goldStatus,60000);
+
+/* ---------- load the archive ---------- */
+fetch('index.json').then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
+  DATA=d;count();shelf();$('ask').disabled=false;say(pick(IDLE));
+}).catch(function(){say('Nek cannot find the archive. Reload the page to try again.')});
+})();
+</script>
+</body>
+</html>
