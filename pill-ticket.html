@@ -124,6 +124,8 @@ button,select,input{font:inherit;color:inherit}
 .bigpill.crack{animation:crack .7s ease-in both}
 @keyframes wob{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
 @keyframes crack{0%{transform:rotate(0)}20%{transform:rotate(-9deg)}40%{transform:rotate(9deg)}60%{transform:rotate(-12deg) scale(1.05)}100%{transform:scale(1.6);opacity:0}}
+.slip{width:100%;max-width:400px;background:var(--paper);color:var(--ink);border:3px solid var(--ink);padding:14px 16px 16px;text-align:left;box-shadow:6px 6px 0 var(--pop);transform:rotate(-1.5deg);font-weight:700;font-size:19px;line-height:1.3}
+.slip b{display:block;font-family:var(--display);font-weight:900;font-stretch:125%;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid var(--ink)}
 .gt{position:relative;width:100%;max-width:520px;color:var(--ink);background:var(--yl);border:3px solid var(--ink);padding:22px 24px 46px;text-align:center;box-shadow:8px 8px 0 var(--pop);overflow:hidden}
 .gt .k{display:inline-block;background:var(--paper);border:2.5px solid var(--ink);padding:5px 10px 4px;font-family:var(--display);font-weight:900;font-stretch:112%;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
 .gt h3{margin:12px 0 8px;font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(26px,7vw,44px);line-height:.95;color:var(--paper);-webkit-text-stroke:2.5px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--ink)}
@@ -169,7 +171,7 @@ button,select,input{font:inherit;color:inherit}
         </select>
       </label>
       <span class="pill"><button id="snd" type="button" aria-pressed="false">Sound off</button></span>
-      <div class="door"><span>Prizes out here ↓</span><span>Pulled <b id="count">0</b> of <b id="total">…</b></span></div>
+      <div class="door"><span><b id="leftn" style="color:var(--yl)">…</b> left in the tank</span><span>Pulled <b id="count">0</b> of <b id="total">…</b></span></div>
     </div>
   </section>
 
@@ -179,14 +181,14 @@ button,select,input{font:inherit;color:inherit}
       <li><kbd>Tap the glass</kbd><span>The claw goes there and drops.</span></li>
       <li><kbd>◀ ▶ + Drop</kbd><span>Or drive it yourself. Arrow keys and space work too.</span></li>
       <li><kbd>Shake</kbd><span>Rummage. Each capsule is the colour of the flyer inside it.</span></li>
-      <li><kbd>The pill</kbd><span>One gold pill hides in the pile. Pull it out and crack it open for a shot at the golden ticket.</span></li>
+      <li><kbd>The pill</kbd><span>One gold pill is buried near the bottom. Dig or shake to reach it, then crack it open. One of them each week holds the golden ticket.</span></li>
     </ul>
     <div class="testbox">
-      <label for="odds">Test · pill odds
-        <select id="odds"><option value="1">Always a ticket</option><option value="3" selected>1 in 3</option><option value="10">1 in 10</option><option value="0">Never</option></select>
+      <label for="odds">Test · this week's ticket
+        <select id="odds"><option value="0" selected>Not in the machine</option><option value="1">In the machine now</option></select>
       </label>
       <label><button class="again" id="repill" type="button" style="min-height:38px;padding:6px 14px;font-size:11px">Put the pill on top</button></label>
-      <p>Mock-up for testing. No real ticket is issued and nothing is emailed or logged.</p>
+      <p>One golden ticket a week, released at a random moment. The first pill opened after that wins it; every other pill holds a surprise. Mock-up: no real ticket is issued.</p>
     </div>
     <div>
       <h2>Your recent pulls</h2>
@@ -200,6 +202,7 @@ button,select,input{font:inherit;color:inherit}
   <div class="pillbox" id="pillbox" hidden>
     <h3 id="pilltitle">You got the pill</h3>
     <div class="bigpill" id="bigpill" aria-hidden="true"></div>
+    <div class="slip" id="slip" hidden><b id="slipk"></b><span id="slipt"></span></div>
     <p id="pilltext">There might be a golden ticket inside. There might be nothing.</p>
     <button class="again" id="crack" type="button">Crack it open</button>
   </div>
@@ -258,11 +261,12 @@ new MutationObserver(readCols).observe(document.documentElement,{attributes:true
 
 /* ---------- the pool ---------- */
 function inEra(e,v){if(v==='all')return true;if(v==='mystery')return !e.d;if(!e.d)return false;var y=+e.d.slice(0,4),p=v.split('-');return y>=+p[0]&&y<=+p[1]}
-function setEra(v){pool=DATA.filter(function(e){return inEra(e,v)});balls=[];for(var i=0;i<29;i++)spawn(true);spawnPill(true)}
+function setEra(v){pool=DATA.filter(function(e){return inEra(e,v)});balls=[];spawnPill(true);for(var i=0;i<29;i++)spawn(true);left()}
 function pick(){var used={};balls.forEach(function(b){used[key(b.e)]=1});var fresh=pool.filter(function(e){return !pulled[key(e)]&&!used[key(e)]});var from=fresh.length?fresh:pool.filter(function(e){return !used[key(e)]});if(!from.length)from=pool;return from[Math.floor(Math.random()*from.length)]}
 function spawn(scatter){var e=pick();if(!e)return;var r=21+Math.random()*4;balls.push({e:e,r:r,x:HOLE+12+r+Math.random()*(TW-HOLE-24-2*r),y:scatter?TH-r-Math.random()*300:-r-10,vx:(Math.random()-.5)*2,vy:0,a:Math.random()*6.28,c:'#'+(e.col||'ae97e0'),held:false,hole:false,lead:true,mate:null})}
+function left(){var n=balls.filter(function(b){return !b.mate}).length;$('leftn').textContent=n}
 function hasPill(){return balls.some(function(b){return b.mate})}
-function spawnPill(scatter,top){var e=pick();if(!e)return;var r=17,L=r*1.9,an=Math.random()*6.28,x=HOLE+14+r+L+Math.random()*(TW-HOLE-28-2*r-2*L),y=top?120:scatter?TH-r-L-Math.random()*300:-r-L-10;
+function spawnPill(scatter,top){var e=pick();if(!e)return;var r=17,L=r*1.9,an=Math.random()*6.28,x=HOLE+14+r+L+Math.random()*(TW-HOLE-28-2*r-2*L),y=top?120:TH-r-2-Math.random()*30;an=(Math.random()-.5)*.6;
   var a={e:e,r:r,L:L,x:x-Math.cos(an)*L/2,y:y-Math.sin(an)*L/2,vx:0,vy:0,a:0,c:col.yl,held:false,hole:false,lead:true},b={e:e,r:r,L:L,x:x+Math.cos(an)*L/2,y:y+Math.sin(an)*L/2,vx:0,vy:0,a:0,c:col.yl,held:false,hole:false,lead:false};a.mate=b;b.mate=a;balls.push(a,b)}
 
 /* ---------- physics ---------- */
@@ -314,7 +318,7 @@ function clawStep(){
     if(claw.t===3&&claw.ball){b=claw.ball;b.held=false;b.hole=true;b.vx=0;b.vy=2;if(b.mate){o=b.mate;o.held=false;o.hole=true;o.vx=0;o.vy=2}}
     if(claw.ball&&Math.min(claw.ball.y,claw.ball.mate?claw.ball.mate.y:1e9)>TH+claw.ball.r+6){b=claw.ball;claw.ball=null;balls.splice(balls.indexOf(b),1);if(b.mate)balls.splice(balls.indexOf(b.mate),1);claw.state='back';if(b.mate)pillWin(b.e);else win(b.e)}
   } else if(claw.state==='back'){
-    claw.x+=4;if(claw.x>=claw.tx||claw.x>=TW/2){claw.state='idle';claw.tx=claw.x;$('drop').disabled=false;if(hasPill())spawn(false);else spawnPill(false)}
+    claw.x+=4;if(claw.x>=claw.tx||claw.x>=TW/2){claw.state='idle';claw.tx=claw.x;$('drop').disabled=false;if(!hasPill())spawnPill(false);left();if(!balls.some(function(b){return !b.mate})){say('Cleaned out. Reloading the machine.',4000);setTimeout(function(){setEra($('era').value)},1800)}}
   }
   if(claw.ball&&claw.ball.held){b=claw.ball;if(b.mate){o=b.mate;b.x=claw.x-b.L/2;o.x=claw.x+b.L/2;b.y=o.y=claw.y+ARM+b.r*.55;b.vx=b.vy=o.vx=o.vy=0}else{b.x=claw.x;b.y=claw.y+ARM+b.r*.55;b.vx=b.vy=0}}
 }
@@ -405,13 +409,42 @@ function win(e){pulled[key(e)]=1;save();count();recent=recent.filter(function(x)
 function count(){var n=0;DATA.forEach(function(e){if(pulled[key(e)])n++});$('count').textContent=n;$('total').textContent=DATA.length}
 function shelf(){var s=$('shelf');s.textContent='';recent.forEach(function(e){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Look again at '+(e.t||'mystery flyer'));var im=new Image();im.alt='';ensure(e).then(function(src){im.src=src});b.appendChild(im);b.addEventListener('click',function(){show(e,true)});s.appendChild(b)});s.hidden=!recent.length;$('empty').hidden=!!recent.length}
 function closePrize(){$('prize').hidden=true;$('pillbox').hidden=true;$('gt').hidden=true;$('card').hidden=false;$('drop').focus()}
-var pillFlyer=null;
+var pillFlyer=null,lastS=-1;
+var SURPRISE=[
+['Fortune','You will lose your friends at 2am and find better ones by the speakers.'],
+['Fortune','The track you are about to ask the name of will never be released.'],
+['Fortune','Someone you meet in the bathroom line tonight will be at your wedding.'],
+['Fortune','Your coat is fine. It is exactly where you left it. Probably.'],
+['Fortune','The sunrise set is going to fix something you did not know was broken.'],
+['Fortune','You will say one more track. There will be nine more tracks.'],
+['Prescription','Bass, twice nightly. Do not operate group chats until Tuesday.'],
+['Prescription','One glass of water for every drink. Yes, starting now.'],
+['Prescription','Four hours of four on the floor. Repeat weekly until symptoms improve.'],
+['Prescription','Earplugs. Take two, insert before doors. Thank us at fifty.'],
+['Prescription','One hug for the friend who drove. Refills unlimited.'],
+['House rule','Phones down. The DJ can see you. So can the person behind you.'],
+['House rule','Compliment a stranger\u2019s outfit before the night ends.'],
+['House rule','The front left is a lifestyle, not a location.'],
+['House rule','If you talk through the breakdown, you carry the cables at load-out.'],
+['House rule','Be nice to the door. The door remembers.'],
+['Rave horoscope','Mercury is in the subwoofer. Avoid big decisions and small rooms.'],
+['Rave horoscope','A tall person will stand in front of you. This is your journey now.'],
+['Rave horoscope','Lucky number: 124. Lucky colour: fog.'],
+['Rave horoscope','The stars say stretch first. The stars are right.'],
+['Dare','Next party: dance for one whole track with your eyes closed.'],
+['Dare','Tell the person who brought you here that they were right.'],
+['Dare','Send this to the friend who always leaves early. Say nothing else.'],
+['Found in the pill','A tiny receipt. It says: one (1) vibe, paid in full.'],
+['Found in the pill','A note from the claw: I let you win.'],
+['Found in the pill','Nothing. Just warm air from a Brooklyn warehouse, sealed in 2008.'],
+['Found in the pill','A very small flyer for a party that already happened. It was great.']
+];
 function pillWin(e){pillFlyer=e;$('card').hidden=true;$('gt').hidden=true;$('pillbox').hidden=false;$('bigpill').className='bigpill';$('bigpill').hidden=false;$('crack').hidden=false;$('crack').textContent='Crack it open';$('crack').onclick=crack;
-  $('pilltitle').textContent='You got the pill';$('pilltext').textContent='There might be a golden ticket inside. There might be nothing.';$('prize').hidden=false;$('crack').focus();say('The pill. Crack it open.',8000);beep(660,.09);setTimeout(function(){beep(990,.2)},120)}
-function crack(){var n=+$('odds').value,hit=n>0&&Math.random()<1/n;$('crack').hidden=true;$('bigpill').className='bigpill crack';beep(140,.5,'sawtooth',.04);
+  $('slip').hidden=true;$('pilltitle').textContent='You got the pill';$('pilltext').textContent='There might be a golden ticket inside. There might be nothing.';$('prize').hidden=false;$('crack').focus();say('The pill. Crack it open.',8000);beep(660,.09);setTimeout(function(){beep(990,.2)},120)}
+function crack(){var hit=$('odds').value==='1';if(hit)$('odds').value='0';$('crack').hidden=true;$('bigpill').className='bigpill crack';beep(140,.5,'sawtooth',.04);
   setTimeout(function(){$('bigpill').hidden=true;
     if(hit){$('pillbox').hidden=true;$('gt').hidden=false;$('gtclose').focus();say('Golden ticket. Test only.',8000);[660,880,1100,1320].forEach(function(f,k){setTimeout(function(){beep(f,.14)},k*110)})}
-    else{$('pilltitle').textContent='Empty';$('pilltext').textContent='No golden ticket this time. A new pill drops into the machine. There was a flyer rolled up in there though.';$('crack').hidden=false;$('crack').textContent='See the flyer';$('crack').onclick=function(){$('pillbox').hidden=true;$('card').hidden=false;win(pillFlyer)};$('crack').focus();beep(160,.3,'triangle')}
+    else{var k;do{k=Math.floor(Math.random()*SURPRISE.length)}while(k===lastS);lastS=k;$('pilltitle').textContent='No ticket this time';$('slipk').textContent=SURPRISE[k][0];$('slipt').textContent=SURPRISE[k][1];$('slip').hidden=false;$('pilltext').textContent='The golden ticket is still out there. A new pill sinks into the pile.';$('crack').hidden=false;$('crack').textContent='Keep playing';$('crack').onclick=closePrize;$('crack').focus();beep(520,.1);setTimeout(function(){beep(390,.2)},110)}
   },reduce?0:700)}
 $('gtclose').addEventListener('click',closePrize);
 $('repill').addEventListener('click',function(){balls=balls.filter(function(b){return !b.mate||b.held});if(!hasPill())spawnPill(false,true);say('Pill dropped on top',2500)});
