@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>The Great Nektarios</title>
+<title>The Great Oracle</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: the fortune machine is drawn as one of German Bardo's night flyers: navy, teal, lilac, pink and orange in flat blocks with heavy black outlines, a boxed title band, Nek's words in a line-up speech bubble, the ticket as a baggage tag. The small print sits right and drops below on phones. */
+/* Layout: the fortune machine is drawn as one of German Bardo's night flyers: navy, teal, lilac, pink and orange in flat blocks with heavy black outlines, a boxed title band, his words in a line-up speech bubble, the ticket as a baggage tag. The small print sits right and drops below on phones. */
 :root{
   --bg:#FFFFFF; --fg:#0A0A0B; --dim:rgba(10,10,11,.66); --line:rgba(10,10,11,.16); --panel:#F4F1EA; --veil:rgba(255,255,255,.95);
   --glass:#FFFFFF; --grid:rgba(10,10,11,.13); --pop:#AE97E0; --hard:#0A0A0B;
@@ -111,7 +111,7 @@ button,select,input{font:inherit;color:inherit}
 .tick.gold,.tick.gold:hover{background:var(--yl)}
 .base{border:3px solid var(--ink);border-top:0;background:var(--nv);padding:11px 16px 10px;text-align:center;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--paper)}
 
-/* Nek, animated */
+/* the face, animated */
 .brow{transform-box:fill-box;transform-origin:center;transition:transform .2s}
 .think .brow.l{animation:wagl .34s ease-in-out infinite alternate}
 .think .brow.r{animation:wagr .34s ease-in-out infinite alternate}
@@ -200,7 +200,7 @@ html:not(.locked) .gate{display:none}
 <script>try{if(localStorage.getItem('rs-nek-ok')!=='a0fc547039cfb6af770a90d595fd78dd1273fd202242c0a555cbefe8525309c4')document.documentElement.classList.add('locked')}catch(e){document.documentElement.classList.add('locked')}</script>
 <div class="gate">
   <form id="gate" novalidate>
-    <h1>The Great<br>Nektarios</h1>
+    <h1>The Great<br>Oracle</h1>
     <p>By invitation only</p>
     <label for="gatepw">Password</label>
     <input id="gatepw" type="password" autocomplete="off" autocapitalize="none" spellcheck="false">
@@ -214,18 +214,18 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
   if(!window.crypto||!crypto.subtle){e.textContent='This browser cannot check the password.';return}
   crypto.subtle.digest('SHA-256',new TextEncoder().encode('rs-nek:'+v)).then(function(b){var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
     if(h===K){try{localStorage.setItem('rs-nek-ok',K)}catch(x){}document.documentElement.classList.remove('locked');window.dispatchEvent(new Event('resize'))}
-    else{e.textContent='Not the word. Nek shakes his head.';document.getElementById('gatepw').select()}})});
+    else{e.textContent='Not the word. He shakes his head.';document.getElementById('gatepw').select()}})});
 })();
 </script>
 <main class="wrap">
-  <section class="cab" id="cab" aria-label="The Great Nektarios fortune machine">
+  <section class="cab" id="cab" aria-label="The Great Oracle fortune machine">
     <header class="band">
-      <h1>The Great<br>Nektarios</h1>
+      <h1>The Great<br>Oracle</h1>
       <p class="inv"><b>Sees all</b>Remembers most of it</p>
       <div class="bulbs" id="bulbs" aria-hidden="true"></div>
     </header>
     <div class="glass">
-      <svg viewBox="0 0 320 310" role="img" aria-label="A cartoon of Nek with big grey curls, enormous eyebrows and a grey goatee, hands over a crystal ball">
+      <svg viewBox="0 0 320 310" role="img" aria-label="A cartoon fortune teller with big grey curls, enormous eyebrows and a grey goatee, hands over a crystal ball">
         <defs>
           <clipPath id="ballclip"><circle cx="160" cy="262" r="33"/></clipPath>
           
@@ -294,9 +294,9 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
         <g class="hand r"><path d="M250 290C254 268 242 252 224 250C210 248 200 256 198 266L208 270C212 262 220 262 222 268L220 290Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M234 254l4-12M223 250l0-13M212 252l-5-11" stroke="#0A0A0B" stroke-width="3" stroke-linecap="round"/><path d="M260 310L254 284H216L214 310Z" fill="#27B5A4" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/><path d="M254 286H216" stroke="#FFCB2E" stroke-width="6"/></g>
       </svg>
     </div>
-    <div class="plate"><small>Nek says</small><p id="say" aria-live="polite">Loading the past…</p></div>
+    <div class="plate"><small>He says</small><p id="say" aria-live="polite">Loading the past…</p></div>
     <div class="deck">
-      <button class="ask" id="ask" type="button" disabled>Ask Nek</button>
+      <button class="ask" id="ask" type="button" disabled>Ask him</button>
       <div class="opts">
         <label class="pill" for="era">Years
           <select id="era">
@@ -312,13 +312,13 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
       </div>
     </div>
     <div class="slot"><div class="mouth"></div><div class="lane"><button class="tick" id="tick" type="button" tabindex="-1" aria-hidden="true"><img id="tickimg" alt=""><span><b id="tickt">Your fortune</b><span id="ticks">Tap to read it</span></span></button></div></div>
-    <div class="base">No coins · Nek works for free</div>
+    <div class="base">No coins · He works for free</div>
   </section>
 
   <section class="side">
     <div>
       <h2>How it works</h2>
-      <p class="lede">Press the button. Nek looks into the ball and tells you which ReSolute night you were at, whether you were or not.</p>
+      <p class="lede">Press the button. He looks into the ball and tells you which ReSolute night you were at, whether you were or not.</p>
     </div>
     <div class="goldbox">
       <strong>The golden ticket</strong>
@@ -330,7 +330,7 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
     <div>
       <h2>Your fortunes so far (<span id="count">0</span> of <span id="total">0</span>)</h2>
       <div class="shelf" id="shelf"></div>
-      <p class="empty" id="noshelf">Nothing yet. The last twelve flyers Nek hands you will sit here.</p>
+      <p class="empty" id="noshelf">Nothing yet. The last twelve flyers he hands you will sit here.</p>
     </div>
     <p class="note">Rather grab one yourself? <a href="https://www.resolutenyc.com/flyer-machine" target="_top">Try the claw machine ↗</a></p>
   </section>
@@ -342,7 +342,7 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
     <div class="info">
       <p class="src" id="psrc"></p>
       <h3 id="ptitle"></h3>
-      <p class="quote"><b>Nek says</b><span id="pquote"></span></p>
+      <p class="quote"><b>He says</b><span id="pquote"></span></p>
       <dl id="pmeta"></dl>
       <div class="acts"><button class="again" id="again" type="button">Ask again</button><a id="plink" target="_blank" rel="noopener" hidden></a></div>
     </div>
@@ -352,7 +352,7 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
       <span class="sample" id="gsample" hidden>Sample · not valid</span>
       <div class="k">ReSolute · Admit two</div>
       <h3 id="gtitle">Golden ticket</h3>
-      <p>Nek has spoken. You and one friend are on the list for any ReSolute event you choose.</p>
+      <p>He has spoken. You and one friend are on the list for any ReSolute event you choose.</p>
       <div class="code" id="gcode">RS-0000-0000</div>
       <div class="fine" id="gfine"></div>
       <form class="gform" id="gform" novalidate hidden>
@@ -413,7 +413,7 @@ function day(ms){return new Date(ms).toLocaleDateString('en-US',{month:'short',d
 function inEra(e,v){if(v==='all')return true;if(!e.d)return false;var y=+e.d.slice(0,4),p=v.split('-');return y>=+p[0]&&y<=+p[1]}
 function pick(a){return a[Math.floor(Math.random()*a.length)]}
 var SRC={ra:'From Resident Advisor',fb:'From Facebook',site:'From the old website',ig:'From Instagram'};
-var IDLE=['Ask Nek what night it was.','The eyebrows are warmed up.','Nek remembers every party. Mostly.','Step up. The ball is clear tonight.'];
+var IDLE=['Ask him what night it was.','The eyebrows are warmed up.','He remembers every party. Mostly.','Step up. The ball is clear tonight.'];
 
 /* ---------- fortunes ---------- */
 function fortune(e){
@@ -481,7 +481,7 @@ function ask(){
   var e=pick(fresh.length?fresh:pool),q=fortune(e),img=ensure(e).catch(function(){return ''});
   var gold=tryGolden().catch(function(){return null});
   $('tick').classList.remove('out');cab.classList.remove('seen');cab.classList.add('think');
-  say(pick(['Nek consults the eyebrows…','The ball is warming up…','Nek squints at the past…','Searching nineteen years of nights…']));
+  say(pick(['He consults the eyebrows…','The ball is warming up…','He squints at the past…','Searching nineteen years of nights…']));
   beep(220,.5,'sine',.05);setTimeout(function(){beep(330,.5,'sine',.05)},350);setTimeout(function(){beep(440,.6,'sine',.05)},700);
   Promise.all([img,gold,wait(1700)]).then(function(r){
     var src=r[0],won=r[1];
@@ -504,7 +504,7 @@ function ask(){
   }).catch(function(){say('The machine jammed. Press the button again.')}).then(function(){busy=false;$('ask').disabled=false});
 }
 $('ask').addEventListener('click',ask);
-$('era').addEventListener('change',function(){era=this.value;var n=DATA.filter(function(e){return inEra(e,era)}).length;say('Nek narrows it to '+this.options[this.selectedIndex].text+'. '+n+' nights in there.')});
+$('era').addEventListener('change',function(){era=this.value;var n=DATA.filter(function(e){return inEra(e,era)}).length;say('He narrows it to '+this.options[this.selectedIndex].text+'. '+n+' nights in there.')});
 $('snd').addEventListener('click',function(){sound=!sound;this.textContent=sound?'Sound on':'Sound off';this.setAttribute('aria-pressed',sound?'true':'false');if(sound)beep(880,.1)});
 
 /* ---------- the golden ticket (shared between everyone using the machine) ---------- */
@@ -562,10 +562,10 @@ function listIssued(){
     docs.map(function(d){return d.data()||{}}).sort(function(a,b){return (b.wonAt||0)-(a.wonAt||0)}).forEach(function(t){var li=document.createElement('li');li.textContent=(t.code||'?')+' · won '+day(t.wonAt||0)+' · valid until '+day(t.validUntil||0);ul.appendChild(li)});
   },function(){});
 }
-$('gprev').addEventListener('click',function(){var n=Date.now();showGold({code:'RS-NEKS-EYES',wonAt:n,validUntil:n+YEAR},true)});
+$('gprev').addEventListener('click',function(){var n=Date.now();showGold({code:'RS-EYES-BROW',wonAt:n,validUntil:n+YEAR},true)});
 $('gmine').addEventListener('click',function(){if(myTicket)showGold(myTicket,false)});
 $('greset').addEventListener('click',function(){if(!db||!isAdmin)return;var b=this;b.disabled=true;db.doc('machine/golden').set({wonAt:0}).then(function(){say('The drawer is reloaded. A golden ticket is back in play.')},function(){say('Could not reset the clock. Try again in a moment.')}).then(function(){b.disabled=false})});
-var CLAIM_ERR={name:'Add your name so the door knows who you are.',email:'That email does not look right. Check it and try again.',too_late:'Too slow. This ticket went back in the machine.',already_claimed:'This ticket has already been claimed.',not_found:'Nek cannot find this ticket. Pull again.'};
+var CLAIM_ERR={name:'Add your name so the door knows who you are.',email:'That email does not look right. Check it and try again.',too_late:'Too slow. This ticket went back in the machine.',already_claimed:'This ticket has already been claimed.',not_found:'He cannot find this ticket. Pull again.'};
 $('gform').addEventListener('submit',function(ev){
   ev.preventDefault();
   if(!API||!myTicket||myTicket.claimed)return;
@@ -620,7 +620,7 @@ setInterval(goldStatus,60000);
 /* ---------- load the archive ---------- */
 fetch('index.json').then(function(r){if(!r.ok)throw new Error(r.status);return r.json()}).then(function(d){
   DATA=d;count();shelf();$('ask').disabled=false;say(pick(IDLE));
-}).catch(function(){say('Nek cannot find the archive. Reload the page to try again.')});
+}).catch(function(){say('He cannot find the archive. Reload the page to try again.')});
 })();
 </script>
 </body>
