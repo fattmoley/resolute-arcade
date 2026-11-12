@@ -140,6 +140,12 @@ dd{margin:0;min-width:0;overflow-wrap:anywhere}
 .gt .fine{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;margin-top:10px}
 .gt .acts{justify-content:center;margin-top:18px}
 .gt .sample{position:absolute;top:18px;right:-34px;transform:rotate(18deg);background:var(--rd);color:var(--paper);border:2px solid var(--ink);padding:3px 44px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.gform{display:grid;gap:6px;max-width:340px;margin:16px auto 4px;text-align:left}
+.gform label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase}
+.gform input{font:inherit;font-size:17px;padding:10px 12px;border:2px solid var(--ink);border-radius:8px;background:var(--paper);color:var(--ink);width:100%;margin-bottom:6px}
+.gform .again{margin-top:6px;justify-self:center}
+.gform #gerr{min-height:1.4em;text-align:center;color:var(--velvet);font-weight:500;margin:4px 0 0}
+#gclose{background:var(--paper)}
 .gtwrap{overflow:hidden;padding:12px 20px 16px;width:100%;display:grid;place-items:center}
 </style>
 <script>(function(){var r=document.documentElement;function set(t){if(t==='dark'||t==='light')r.setAttribute('data-theme',t)}var m=/[?&]theme=(dark|light)/.exec(location.search);if(m)set(m[1]);window.addEventListener('message',function(e){if(e.data&&e.data.rsTheme)set(e.data.rsTheme)})})();</script>
@@ -240,7 +246,7 @@ dd{margin:0;min-width:0;overflow-wrap:anywhere}
       <h2>How it works</h2>
       <p class="lede">Press the button. Nek looks into the ball and tells you which ReSolute night you were at, whether you were or not.</p>
     </div>
-    <div class="goldbox" hidden>
+    <div class="goldbox">
       <strong>The golden ticket</strong>
       <p>One golden ticket hides in the machine each week. It gets you and a friend into any ReSolute event for the next 365 days. Once somebody pulls it, the machine goes seven days before another one can appear.</p>
       <p class="st" id="goldst">Checking the ticket drawer…</p>
@@ -275,8 +281,15 @@ dd{margin:0;min-width:0;overflow-wrap:anywhere}
       <p>Nek has spoken. You and one friend are on the list for any ReSolute event you choose.</p>
       <div class="code" id="gcode">RS-0000-0000</div>
       <div class="fine" id="gfine"></div>
-      <div class="fine">To claim it, screenshot this ticket and message @resolutenyc on Instagram with the code.</div>
-      <div class="acts"><button class="again" id="gclose" type="button">Keep playing</button></div>
+      <form class="gform" id="gform" novalidate hidden>
+        <label for="gname">Your name</label><input id="gname" name="name" type="text" autocomplete="name" maxlength="80" required>
+        <label for="gemail">Your email</label><input id="gemail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required>
+        <button class="again" id="gclaim" type="submit">Claim my ticket</button>
+        <p class="fine" id="gerr" role="alert"></p>
+      </form>
+      <div class="fine" id="gmailed" hidden></div>
+      <div class="fine" id="ghow">To claim it, screenshot this ticket and message @resolutenyc on Instagram with the code.</div>
+      <div class="acts"><button class="again" id="gdl" type="button" hidden>Download ticket</button><button class="again" id="gclose" type="button">Keep playing</button></div>
     </div>
   </div>
 </div>
@@ -287,6 +300,7 @@ dd{margin:0;min-width:0;overflow-wrap:anywhere}
 var $=function(id){return document.getElementById(id)};
 var NS='http://www.w3.org/2000/svg';
 var WEEK=7*864e5, YEAR=365*864e5, ODDS=1/40;
+var API='https://script.google.com/macros/s/AKfycbxrzUEIQiegPVzxcygIFnu94qMVkpBBWIKjOIyW150H2ETl-AB6gSAfLtPomPEbzuS8Sg/exec'; /* golden ticket service URL; empty means the private preview's own store */
 var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 var DATA=[],bundles={},pulled={},recent=[],busy=false,sound=false,ac=null,era='all',lastShown=null;
 try{pulled=JSON.parse(localStorage.getItem('rs-nek-pulled')||'{}')||{}}catch(e){}
@@ -365,8 +379,13 @@ function showGold(t,sample){
   $('pcard').hidden=true;$('gwrap').hidden=false;
   $('gsample').hidden=!sample;
   $('gcode').textContent=t.code;
-  $('gfine').textContent='Won '+day(t.wonAt)+' · Valid until '+day(t.validUntil)+' · Good for one event, two people';
-  $('prize').hidden=false;$('gclose').focus();
+  $('gfine').textContent=(t.name?t.name+' · ':'Won '+day(t.wonAt)+' · ')+'Valid until '+day(t.validUntil)+' · Good for one event, two people';
+  var live=API&&!sample,pend=live&&!t.claimed;
+  $('gform').hidden=!pend;$('gerr').textContent='';$('gclaim').disabled=false;
+  $('gdl').hidden=!(live&&t.claimed);$('gmailed').hidden=!(live&&t.claimed);
+  if(live&&t.claimed)$('gmailed').textContent=t.mailed===false?'We could not send the email. Download the ticket now and keep it safe.':'We emailed this ticket to '+t.email+'. You can download it too.';
+  if(API)$('ghow').textContent=pend?'Claim it within '+Math.max(1,Math.round((t.claimBy-Date.now())/6e4))+' minutes or it goes back in the machine.':'Show this ticket or the email at the door. The door team will check the code.';
+  $('prize').hidden=false;(pend?$('gname'):$('gclose')).focus();
 }
 function closePrize(){$('prize').hidden=true;$('ask').focus()}
 $('again').addEventListener('click',function(){closePrize();ask()});
@@ -420,6 +439,15 @@ function code(){var A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',s='',b=new Uint8Array(8
 function left(ms){var d=Math.floor(ms/864e5),h=Math.ceil((ms-d*864e5)/36e5);if(h===24){d++;h=0}return (d?d+(d===1?' day':' days'):'')+(d&&h?' ':'')+(h?h+(h===1?' hour':' hours'):'')||'under an hour'}
 function goldStatus(){
   var s=$('goldst');
+  if(API){
+    $('greset').hidden=true;
+    $('gmine').hidden=!(myTicket&&myTicket.validUntil>Date.now()&&(myTicket.claimed||myTicket.claimBy>Date.now()));
+    if(!astate){s.textContent='Checking the ticket drawer…';return}
+    if(astate.err){s.textContent='The ticket drawer is not answering right now. Flyers still work.';return}
+    var wait=astate.nextAt-Date.now();
+    s.textContent=astate.loaded?'A golden ticket is in the machine right now.':wait>0?'The last ticket has been claimed. The next one can appear in '+left(wait)+'.':'Somebody is claiming a golden ticket right now.';
+    return;
+  }
   $('gmine').hidden=!(myTicket&&myTicket.validUntil>Date.now());
   $('greset').hidden=!isAdmin;
   if(!db){s.textContent='The golden ticket is switched off in this view. It only drops for people signed in with the ReSolute team.';return}
@@ -428,7 +456,14 @@ function goldStatus(){
   if(gap>0)s.textContent='This week’s ticket was pulled on '+day(wonAt)+'. The next one can appear in '+left(gap)+'.';
   else s.textContent=canWrite?'A golden ticket is in the machine right now. Every press has a 1 in '+Math.round(1/ODDS)+' chance.':'A golden ticket is in the machine, but your access is view-only so it cannot drop for you.';
 }
+var astate=null;
+function api(o){return fetch(API,{method:'POST',body:JSON.stringify(o)}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+function saveT(){try{localStorage.setItem('rs-nek-ticket',JSON.stringify(myTicket))}catch(e){}}
 function tryGolden(){
+  if(API)return api({action:'draw'}).then(function(r){
+    if(!r||!r.won)return null;
+    myTicket={code:r.code,key:r.key,wonAt:r.wonAt,validUntil:r.validUntil,claimBy:r.claimBy};saveT();
+    astate={ok:true,loaded:false,nextAt:0};goldStatus();return myTicket});
   if(!db||!canWrite||!uid||!gknown)return Promise.resolve(null);
   if(gstate&&gstate.wonAt&&Date.now()-gstate.wonAt<WEEK)return Promise.resolve(null);
   if(Math.random()>=ODDS)return Promise.resolve(null);
@@ -455,8 +490,43 @@ function listIssued(){
 $('gprev').addEventListener('click',function(){var n=Date.now();showGold({code:'RS-NEKS-EYES',wonAt:n,validUntil:n+YEAR},true)});
 $('gmine').addEventListener('click',function(){if(myTicket)showGold(myTicket,false)});
 $('greset').addEventListener('click',function(){if(!db||!isAdmin)return;var b=this;b.disabled=true;db.doc('machine/golden').set({wonAt:0}).then(function(){say('The drawer is reloaded. A golden ticket is back in play.')},function(){say('Could not reset the clock. Try again in a moment.')}).then(function(){b.disabled=false})});
+var CLAIM_ERR={name:'Add your name so the door knows who you are.',email:'That email does not look right. Check it and try again.',too_late:'Too slow. This ticket went back in the machine.',already_claimed:'This ticket has already been claimed.',not_found:'Nek cannot find this ticket. Pull again.'};
+$('gform').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  if(!API||!myTicket||myTicket.claimed)return;
+  var name=$('gname').value.trim(),email=$('gemail').value.trim();
+  if(!name){$('gerr').textContent=CLAIM_ERR.name;$('gname').focus();return}
+  if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)){$('gerr').textContent=CLAIM_ERR.email;$('gemail').focus();return}
+  $('gclaim').disabled=true;$('gerr').textContent='Claiming…';
+  api({action:'claim',code:myTicket.code,key:myTicket.key,name:name,email:email}).then(function(r){
+    if(!r||!r.ok){$('gclaim').disabled=false;$('gerr').textContent=CLAIM_ERR[r&&r.error]||'Could not claim it just now. Try again.';if(r&&(r.error==='too_late'||r.error==='not_found')){myTicket=null;saveT();goldStatus()}return}
+    myTicket={code:r.code,wonAt:myTicket.wonAt,validUntil:r.validUntil,name:r.name,email:email,claimed:true,mailed:r.mailed};saveT();
+    astate={ok:true,loaded:false,nextAt:r.claimedAt+WEEK};goldStatus();showGold(myTicket,false);
+    $('ticks').textContent='Claimed. Tap to see it';
+  },function(){$('gclaim').disabled=false;$('gerr').textContent='Could not reach the ticket drawer. Check your connection and try again.'});
+});
+function ticketImage(t){
+  var c=document.createElement('canvas'),W=1200,H=630;c.width=W;c.height=H;var x=c.getContext('2d');
+  var g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#F2B705');g.addColorStop(.4,'#FFE98A');g.addColorStop(.65,'#F2B705');g.addColorStop(1,'#FFE98A');
+  x.fillStyle='#0A0A0B';x.fillRect(0,0,W,H);x.fillStyle=g;x.fillRect(14,14,W-28,H-28);
+  x.fillStyle='#0A0A0B';[0,W].forEach(function(px){x.beginPath();x.arc(px,H/2,34,0,7);x.fill()});
+  x.textAlign='center';x.fillStyle='#0A0A0B';
+  x.font='500 24px "IBM Plex Mono",Menlo,monospace';x.fillText('R E S O L U T E   ·   A D M I T   T W O',W/2,92);
+  x.font='112px "Bagel Fat One","Arial Black",Impact,sans-serif';x.fillText('Golden Ticket',W/2,218);
+  x.font='500 34px Jost,Futura,"Trebuchet MS",sans-serif';x.fillText((t.name||'You')+' + one friend, any ReSolute event',W/2,290,W-160);
+  x.fillStyle='#FFFFFF';x.fillRect(W/2-290,330,580,116);x.setLineDash([14,10]);x.lineWidth=4;x.strokeStyle='#0A0A0B';x.strokeRect(W/2-290,330,580,116);x.setLineDash([]);
+  x.fillStyle='#0A0A0B';x.font='500 64px "IBM Plex Mono",Menlo,monospace';x.fillText(t.code,W/2,410);
+  x.font='500 26px "IBM Plex Mono",Menlo,monospace';x.fillText('Valid until '+day(t.validUntil)+'  ·  One event, two people',W/2,506);
+  x.font='400 22px Jost,Futura,"Trebuchet MS",sans-serif';x.fillText('Show this at the door. The door team checks the code and marks it used.',W/2,560);
+  return c;
+}
+$('gdl').addEventListener('click',function(){
+  if(!myTicket||!myTicket.claimed)return;
+  try{ticketImage(myTicket).toBlob(function(b){if(!b)return;var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='resolute-golden-ticket-'+myTicket.code+'.png';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},2000)},'image/png')}catch(e){$('gmailed').textContent='Could not make the image here. Screenshot this ticket instead.'}
+});
 goldStatus();
 (function(){
+  if(API){api({action:'status'}).then(function(r){astate=r&&r.ok?r:{err:1};goldStatus()},function(){astate={err:1};goldStatus()});return}
   if(!window.claude||!window.claude.use){return}
   Promise.all([window.claude.use('db'),window.claude.use('user')]).then(function(r){
     db=r[0];user=r[1];

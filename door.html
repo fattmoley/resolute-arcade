@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>ReSolute Door Check</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=IBM+Plex+Mono:wght@400;500&family=Jost:wght@400;500&display=swap">
+<style>
+/* Layout: one narrow column for a phone held at the door: PIN, code, one big answer. */
+:root{--bg:#FFFFFF;--fg:#0A0A0B;--dim:rgba(10,10,11,.62);--line:rgba(10,10,11,.16);--panel:#F3F3EF;--ink:#0A0A0B;--paper:#FFFFFF;
+  --yl:#FFF200;--gold:#F2B705;--ok:#0B8F3C;--ok-bg:#DDF6E4;--no:#C4161C;--no-bg:#FCE1E2;--warn:#8A5A00;--warn-bg:#FFF1C9;
+  --display:"Bagel Fat One","Arial Black",Impact,sans-serif;--sans:"Jost","Futura","Century Gothic","Trebuchet MS",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme: dark){:root{--bg:#050506;--fg:#F2F2EF;--dim:rgba(242,242,239,.64);--line:rgba(242,242,239,.2);--panel:#141417;--ok:#5BE08A;--ok-bg:#0E2A18;--no:#FF7A7F;--no-bg:#33100F;--warn:#FFD36B;--warn-bg:#2E2305;color-scheme:dark}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:18px;line-height:1.45;padding:max(24px,env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) max(40px,env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
+main{max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1{margin:0;font-family:var(--display);font-weight:400;font-size:34px;line-height:1}
+.k{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:0 0 6px}
+form{display:flex;flex-direction:column;gap:14px}
+label{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+input{font:inherit;width:100%;padding:13px 14px;border:2px solid var(--fg);border-radius:10px;background:var(--bg);color:var(--fg)}
+#code{font-family:var(--mono);font-size:24px;letter-spacing:.12em;text-transform:uppercase}
+#pin{font-family:var(--mono);letter-spacing:.3em}
+button{font:inherit;cursor:pointer}
+.go{border:3px solid var(--ink);background:var(--yl);color:var(--ink);border-radius:999px;padding:13px 26px;font-family:var(--display);font-size:21px;box-shadow:0 5px 0 var(--ink)}
+.go:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.go[disabled]{opacity:.6;cursor:default}
+:focus-visible{outline:3px solid #2454FF;outline-offset:3px}
+.res{border:3px solid var(--fg);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:10px}
+.res .big{font-family:var(--display);font-size:40px;line-height:1}
+.res.ok{background:var(--ok-bg);border-color:var(--ok)}.res.ok .big{color:var(--ok)}
+.res.no{background:var(--no-bg);border-color:var(--no)}.res.no .big{color:var(--no)}
+.res.warn{background:var(--warn-bg);border-color:var(--warn)}.res.warn .big{color:var(--warn)}
+.res dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px}
+.res dt{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding-top:5px}
+.res dd{margin:0;overflow-wrap:anywhere}
+.msg{font-family:var(--mono);font-size:13px;min-height:1.4em;margin:0}
+</style>
+</head>
+<body>
+<main>
+  <div><p class="k">ReSolute · door team only</p><h1>Golden ticket check</h1></div>
+  <form id="f" novalidate>
+    <div><label for="pin">Door PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12"></div>
+    <div><label for="code">Ticket code</label><input id="code" type="text" autocapitalize="characters" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="RS-XXXX-XXXX" maxlength="20"></div>
+    <button class="go" id="check" type="submit">Check ticket</button>
+    <p class="msg" id="msg" role="status"></p>
+  </form>
+  <section class="res" id="res" hidden aria-live="polite">
+    <div class="big" id="big"></div>
+    <div id="why"></div>
+    <dl id="info"></dl>
+    <div id="usebox" hidden>
+      <label for="note">Event (optional)</label><input id="note" type="text" maxlength="120" placeholder="Which party is this for?">
+      <p style="margin:14px 0 0"><button class="go" id="use" type="button">Mark as used</button></p>
+    </div>
+  </section>
+</main>
+<script>
+(function(){
+'use strict';
+var API='https://script.google.com/macros/s/AKfycbxrzUEIQiegPVzxcygIFnu94qMVkpBBWIKjOIyW150H2ETl-AB6gSAfLtPomPEbzuS8Sg/exec';
+var $=function(id){return document.getElementById(id)},cur='';
+try{$('pin').value=sessionStorage.getItem('rs-door-pin')||''}catch(e){}
+function api(o){return fetch(API,{method:'POST',body:JSON.stringify(o)}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+function when(ms){return ms?new Date(ms).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}):''}
+function day(ms){return ms?new Date(ms).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):''}
+function row(k,v){if(!v)return;var a=document.createElement('dt'),b=document.createElement('dd');a.textContent=k;b.textContent=v;$('info').appendChild(a);$('info').appendChild(b)}
+function fail(r){
+  if(r&&r.error==='pin'){$('msg').textContent='Wrong PIN. Check the Settings tab of the ticket sheet.';$('pin').focus();return true}
+  if(r&&r.error==='locked'){$('msg').textContent='Too many wrong PINs. Wait ten minutes and try again.';return true}
+  if(!r||!r.ok){$('msg').textContent='Could not check just now. Try again.';return true}
+  return false;
+}
+function show(r,justMarked){
+  var res=$('res');res.hidden=false;$('info').textContent='';$('usebox').hidden=true;res.className='res';
+  if(!r.found){res.classList.add('no');$('big').textContent='Not found';$('why').textContent='No ticket has this code. Check the letters and try again.';return}
+  row('Name',r.name);row('Code',r.code);row('Valid until',day(r.validUntil));
+  if(justMarked){res.classList.add('ok');$('big').textContent='Marked used';$('why').textContent='Let them in: '+(r.name||'guest')+' plus one. This ticket is now spent.';row('Used',when(r.usedAt));row('Event',r.usedNote);return}
+  if(r.valid){res.classList.add('ok');$('big').textContent='Valid';$('why').textContent='Admit '+(r.name||'guest')+' plus one, then mark it used.';$('usebox').hidden=false;return}
+  if(r.status==='Used'){res.classList.add('no');$('big').textContent='Already used';$('why').textContent='This ticket was spent on '+when(r.usedAt)+'.';row('Event',r.usedNote);return}
+  if(r.expired){res.classList.add('no');$('big').textContent='Expired';$('why').textContent='This ticket ran out on '+day(r.validUntil)+'.';return}
+  res.classList.add('warn');$('big').textContent='Not claimed';$('why').textContent='This code was pulled from the machine but nobody claimed it, so it is not valid.';
+}
+$('f').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  var pin=$('pin').value.trim(),code=$('code').value.trim();
+  if(!pin){$('msg').textContent='Enter the door PIN.';$('pin').focus();return}
+  if(!code){$('msg').textContent='Enter the code on the ticket.';$('code').focus();return}
+  try{sessionStorage.setItem('rs-door-pin',pin)}catch(e){}
+  $('check').disabled=true;$('msg').textContent='Checking…';$('res').hidden=true;
+  api({action:'check',pin:pin,code:code}).then(function(r){$('msg').textContent='';if(fail(r))return;cur=r.found?r.code:'';show(r,false)},function(){$('msg').textContent='No connection to the ticket log. Try again.'}).then(function(){$('check').disabled=false});
+});
+$('use').addEventListener('click',function(){
+  if(!cur)return;var b=this;b.disabled=true;$('msg').textContent='Marking…';
+  api({action:'use',pin:$('pin').value.trim(),code:cur,note:$('note').value.trim()}).then(function(r){$('msg').textContent='';if(fail(r))return;show(r,!!r.marked);if(r.marked){$('code').value='';$('note').value='';cur=''}},function(){$('msg').textContent='No connection. The ticket is NOT marked yet. Try again.'}).then(function(){b.disabled=false});
+});
+})();
+</script>
+</body>
+</html>
