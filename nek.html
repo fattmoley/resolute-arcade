@@ -35,8 +35,9 @@ button,select,input{font:inherit;color:inherit}
 
 /* ---------- the box: every machine is one flat-colour block, drawn like a flyer, with a hatched side and a lid ---------- */
 .cab{flex:0 1 440px;min-width:0;width:calc(100% - var(--d));max-width:440px;margin:var(--rise) var(--d) 0 0;color:var(--ink);position:relative}
-.cab::before{content:"";position:absolute;left:0;top:calc(-1*var(--rise));width:calc(100% + var(--d));height:var(--rise);border-top:3px solid var(--ink);clip-path:polygon(var(--d) 0,100% 0,calc(100% - var(--d)) 100%,0 100%);background:linear-gradient(to bottom right,transparent calc(50% - 3px),var(--ink) calc(50% - 3px) calc(50% + 3px),transparent calc(50% + 3px)) left top/var(--d) 100% no-repeat,linear-gradient(to bottom right,transparent calc(50% - 1.5px),var(--ink) calc(50% - 1.5px) calc(50% + 1.5px),transparent calc(50% + 1.5px)) right top/var(--d) 100% no-repeat,var(--lid,var(--yl))}
-.cab::after{content:"";position:absolute;left:100%;top:calc(-1*var(--rise));width:var(--d);height:calc(100% + var(--rise));border-right:3px solid var(--ink);clip-path:polygon(0 var(--rise),100% 0,100% calc(100% - var(--rise)),0 100%);background:linear-gradient(to bottom right,transparent calc(50% - 1.5px),var(--ink) calc(50% - 1.5px) calc(50% + 1.5px),transparent calc(50% + 1.5px)) left top/100% var(--rise) no-repeat,linear-gradient(to bottom right,transparent calc(50% - 3px),var(--ink) calc(50% - 3px) calc(50% + 3px),transparent calc(50% + 3px)) left bottom/100% var(--rise) no-repeat,var(--hatch),var(--side,var(--li))}
+.cab::before,.cab::after{content:"";position:absolute;left:0;top:calc(-1*var(--rise));width:calc(100% + var(--d));height:calc(100% + var(--rise));pointer-events:none}
+.cab::before{background:var(--ink);clip-path:polygon(0 var(--rise),var(--d) 0,100% 0,100% calc(100% - var(--rise)),calc(100% - var(--d)) 100%,calc(100% - var(--d)) var(--rise))}
+.cab::after{clip-path:polygon(6px var(--rise),calc(var(--d) + .8px) 3px,calc(100% - 8.2px) 3px,calc(100% - var(--d) - 3px) var(--rise),calc(100% - var(--d)) calc(var(--rise) + 1.73px),calc(100% - 3px) 3.46px,calc(100% - 3px) calc(100% - var(--rise) - 1.73px),calc(100% - var(--d)) calc(100% - 3.46px),calc(100% - var(--d)) calc(var(--rise) + 1.73px),calc(100% - var(--d) - 3px) var(--rise));background:linear-gradient(to bottom right,var(--lid,var(--yl)) 50%,transparent 50%) right top/var(--d) var(--rise) no-repeat,linear-gradient(var(--lid,var(--yl)),var(--lid,var(--yl))) left top/calc(100% - var(--d)) var(--rise) no-repeat,var(--hatch),var(--side,var(--li))}
 .band{background:var(--top,var(--pk));border:3px solid var(--ink);border-bottom:0;padding:12px;display:flex;gap:6px;align-items:stretch}
 .band>*{margin:0;background:var(--paper);border:2.5px solid var(--ink);padding:8px 10px;display:flex;flex-direction:column;justify-content:center;min-width:0}
 .band h1{flex:1 1 auto;font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(20px,6.2vw,28px);line-height:.95;letter-spacing:.005em}
@@ -178,6 +179,17 @@ button,select,input{font:inherit;color:inherit}
 .gform #gerr{min-height:1.4em;text-align:center;color:var(--velvet);font-weight:700;margin:4px 0 0}
 #gclose{background:var(--paper)}
 .gtwrap{overflow:hidden;padding:12px 20px 20px;width:100%;display:grid;place-items:center}
+/* the lock on the door */
+html.locked .wrap{display:none}
+html:not(.locked) .gate{display:none}
+.gate{max-width:400px;margin:var(--rise) auto 0;padding:0 var(--d) 0 0}
+.gate form{position:relative;background:var(--nv);border:3px solid var(--ink);padding:14px;display:grid;gap:10px;box-shadow:8px 8px 0 var(--pop)}
+.gate h1{margin:0;background:var(--paper);color:var(--ink);border:2.5px solid var(--ink);padding:10px 12px;font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(19px,5.8vw,26px);line-height:.95}
+.gate p{margin:0;background:var(--ink);color:var(--paper);padding:8px 12px 7px;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.gate label{font-family:var(--display);font-weight:900;font-stretch:112%;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper);margin-top:4px}
+.gate input{font-size:17px;padding:10px 12px;border:2.5px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);width:100%}
+.gate .again{justify-self:start;background:var(--or);box-shadow:5px 5px 0 var(--ink)}
+.gate #gateerr{min-height:1.5em;background:transparent;color:var(--yl);padding:0}
 </style>
 <style>html.embedded,html.embedded body{background:transparent!important}html.embedded{color-scheme:light!important}html.embedded body{padding-top:8px}</style>
 <script>(function(){var r=document.documentElement,emb=window.top!==window.self;if(emb)r.classList.add('embedded');function set(t){if(t!=='dark'&&t!=='light')return;r.setAttribute('data-theme',t);if(emb)try{window.parent.postMessage({rsThemeAck:t},'*')}catch(e){}}var m=/[?&]theme=(dark|light)/.exec(location.search);if(m)set(m[1]);window.addEventListener('message',function(e){if(e.data&&e.data.rsTheme)set(e.data.rsTheme)})})();</script>
@@ -185,6 +197,26 @@ button,select,input{font:inherit;color:inherit}
 <body>
 
 
+<script>try{if(localStorage.getItem('rs-nek-ok')!=='a0fc547039cfb6af770a90d595fd78dd1273fd202242c0a555cbefe8525309c4')document.documentElement.classList.add('locked')}catch(e){document.documentElement.classList.add('locked')}</script>
+<div class="gate">
+  <form id="gate" novalidate>
+    <h1>The Great<br>Nektarios</h1>
+    <p>By invitation only</p>
+    <label for="gatepw">Password</label>
+    <input id="gatepw" type="password" autocomplete="off" autocapitalize="none" spellcheck="false">
+    <button class="again" type="submit">Enter</button>
+    <p id="gateerr" role="alert"></p>
+  </form>
+</div>
+<script>
+(function(){var K='a0fc547039cfb6af770a90d595fd78dd1273fd202242c0a555cbefe8525309c4',f=document.getElementById('gate');
+f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getElementById('gatepw').value.trim().toLowerCase(),e=document.getElementById('gateerr');
+  if(!window.crypto||!crypto.subtle){e.textContent='This browser cannot check the password.';return}
+  crypto.subtle.digest('SHA-256',new TextEncoder().encode('rs-nek:'+v)).then(function(b){var h=Array.prototype.map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('');
+    if(h===K){try{localStorage.setItem('rs-nek-ok',K)}catch(x){}document.documentElement.classList.remove('locked');window.dispatchEvent(new Event('resize'))}
+    else{e.textContent='Not the word. Nek shakes his head.';document.getElementById('gatepw').select()}})});
+})();
+</script>
 <main class="wrap">
   <section class="cab" id="cab" aria-label="The Great Nektarios fortune machine">
     <header class="band">
