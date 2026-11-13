@@ -258,14 +258,14 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
         <path d="M196 226L226 238L212 266L191 244Z" fill="#86A6C8" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/>
         <path d="M100 240L110 259L124 244M220 240L210 259L196 244" fill="none" stroke="#E3C16F" stroke-width="1.5" stroke-dasharray="4 3" stroke-linejoin="round"/>
         <path d="M96 238l-3 4M108 266l-1 5M226 238l3 4M212 266l1 5" stroke="#D9E5F1" stroke-width="1.6" stroke-linecap="round"/>
-        <g id="hairback" transform="translate(0 -22)"></g>
+        <path d="M160 30C104 28 66 70 70 124C72 150 86 166 100 170L220 170C234 166 248 150 250 124C254 70 216 28 160 30Z" fill="#55555B" stroke="#0A0A0B" stroke-width="3"/>
+        <g id="hairback"></g>
         <!-- ears, neck, head -->
         <rect x="130" y="196" width="60" height="40" rx="12" fill="#C98F6B" stroke="#0A0A0B" stroke-width="3"/>
         <path d="M126 227Q160 252 194 227" fill="none" stroke="#0A0A0B" stroke-width="12" stroke-linecap="round"/><path d="M126 227Q160 252 194 227" fill="none" stroke="#B8860F" stroke-width="6.5" stroke-linecap="round"/><path d="M134 229l-2 6M144 234l-1 6M176 234l1 6M186 229l2 6" stroke="#0A0A0B" stroke-width="1.3" stroke-linecap="round"/>
         <g transform="translate(0 -30) scale(1 1.15)">
         <ellipse cx="102" cy="158" rx="9" ry="14" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
         <ellipse cx="218" cy="158" rx="9" ry="14" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
-        <circle cx="221" cy="178" r="7" fill="none" stroke="#FFCB2E" stroke-width="4"/>
         <ellipse cx="160" cy="207" rx="43" ry="17" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
         <path d="M108 146C108 96 132 66 160 66C188 66 212 96 212 146C218 168 212 196 194 208C180 217 140 217 126 208C108 196 102 168 108 146Z" fill="#E2AD88" stroke="#0A0A0B" stroke-width="3"/>
         <!-- stubble and goatee -->
@@ -289,13 +289,10 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
         <!-- the eyebrows -->
         <path class="brow l" d="M111 140Q131 113 155 134" fill="none" stroke="#0A0A0B" stroke-width="15" stroke-linecap="round"/>
         <path class="brow r" d="M165 134Q189 113 209 140" fill="none" stroke="#0A0A0B" stroke-width="15" stroke-linecap="round"/>
-        <!-- headband and jewel -->
-        <g transform="translate(0 -22)">
-        <path d="M112 116Q160 92 208 116L207 128Q160 105 113 128Z" fill="#FFCB2E" stroke="#0A0A0B" stroke-width="2.5" stroke-linejoin="round"/>
-        <path d="M160 96l9 10l-9 10l-9-10z" fill="#F47B3E" stroke="#0A0A0B" stroke-width="2.5" stroke-linejoin="round"/>
         </g>
-        </g>
-        <g id="hairfront" transform="translate(0 -24)"></g>
+        <circle cx="220" cy="174" r="6" fill="none" stroke="#0A0A0B" stroke-width="6.5"/><circle cx="220" cy="174" r="6" fill="none" stroke="#FFCB2E" stroke-width="3.2"/>
+        <path d="M103 118C94 62 128 36 160 36C192 36 226 62 217 118C206 94 186 79 160 79C134 79 114 94 103 118Z" fill="#55555B" stroke="#0A0A0B" stroke-width="2.6" stroke-linejoin="round"/>
+        <g id="hairfront"></g>
         <!-- crystal ball -->
         <path d="M128 310L138 290H182L192 310Z" fill="#F47B3E" stroke="#0A0A0B" stroke-width="3" stroke-linejoin="round"/>
         <circle cx="160" cy="262" r="33" fill="#D4F4EE"/>
@@ -401,19 +398,25 @@ function key(e){return e.s+'|'+(e.u||'')+'|'+e.b+'.'+e.i}
 /* ---------- draw the curls, stars and bulbs ---------- */
 function rng(s){return function(){s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296}}
 function el(n,a){var x=document.createElementNS(NS,n);for(var k in a)x.setAttribute(k,a[k]);return x}
-var HAIR=['#8D8D93','#B9B9BF','#5F5F66','#D8D8DC','#9C9CA2','#3E3E44','#C6C6CB','#77777D'];
-function curls(g,n,a0,a1,r0,r1,s0,s1,seed){
+var HAIR=['#8D8D93','#B9B9BF','#5F5F66','#D8D8DC','#9C9CA2','#3E3E44','#C6C6CB','#77777D','#E6E6EA','#4B4B51','#AFAFB5'];
+function curls(g,n,a0,a1,r0,r1,s0,s1,seed,cy,wisp){
+  cy=cy||146;
   var R=rng(seed),list=[];
-  for(var i=0;i<n;i++){var t=n>1?i/(n-1):.5,a=(a0+(a1-a0)*t+(R()-.5)*8)*Math.PI/180,rad=r0+(r1-r0)*R();list.push({x:160+Math.cos(a)*rad*1.08,y:146-Math.sin(a)*rad,r:s0+(s1-s0)*R(),c:HAIR[Math.floor(R()*HAIR.length)],k:R()})}
+  for(var i=0;i<n;i++){var t=n>1?i/(n-1):.5,a=(a0+(a1-a0)*t+(R()-.5)*8)*Math.PI/180,rad=r0+(r1-r0)*R();list.push({x:160+Math.cos(a)*rad*1.08,y:cy-Math.sin(a)*rad,r:s0+(s1-s0)*R(),c:HAIR[Math.floor(R()*HAIR.length)],k:R()})}
   list.sort(function(p,q){return p.k-q.k});
   list.forEach(function(p){
+    if(wisp){g.appendChild(el('path',{d:'M'+(p.x-p.r).toFixed(1)+' '+p.y.toFixed(1)+'a'+p.r.toFixed(1)+' '+p.r.toFixed(1)+' 0 1 1 '+(p.r*1.5).toFixed(1)+' '+(p.r*.8).toFixed(1),fill:'none',stroke:p.k>.5?'#0A0A0B':p.c,'stroke-width':p.k>.5?2:2.6,'stroke-linecap':'round'}));return}
     g.appendChild(el('circle',{cx:p.x.toFixed(1),cy:p.y.toFixed(1),r:p.r.toFixed(1),fill:p.c,stroke:'#0A0A0B','stroke-width':2.4}));
     var q=p.r*.5;g.appendChild(el('path',{d:'M'+(p.x-q).toFixed(1)+' '+p.y.toFixed(1)+'a'+q.toFixed(1)+' '+q.toFixed(1)+' 0 1 1 '+(q*1.1).toFixed(1)+' '+(q*.7).toFixed(1),fill:'none',stroke:'#0A0A0B','stroke-opacity':.5,'stroke-width':1.6,'stroke-linecap':'round'}));
   });
 }
-curls($('hairback'),34,-22,202,60,92,13,20,7);
-curls($('hairback'),20,5,175,52,70,12,17,21);
-curls($('hairfront'),12,28,152,50,58,9,13,4);
+/* a big, wild, salt-and-pepper mop: swept up off a high forehead, loose strands escaping at the edges */
+curls($('hairback'),16,-14,194,92,100,5,9,31,128,1);
+curls($('hairback'),44,-26,206,60,90,11,19,7,128);
+curls($('hairback'),24,0,180,44,70,11,17,21,120);
+curls($('hairfront'),20,22,158,64,84,10,16,13,128);
+curls($('hairfront'),15,32,148,49,58,8,12,4,128);
+curls($('hairfront'),9,40,140,78,92,4,7,17,128,1);
 (function(){var R=rng(11),g=$('stars');for(var i=0;i<16;i++){var x=80+R()*160,y=30+R()*60,s=1.2+R()*2.2;g.appendChild(el('circle',{cx:x.toFixed(0),cy:y.toFixed(0),r:s.toFixed(1),'class':'star'}))}})();
 (function(){var b=$('bulbs');for(var i=0;i<13;i++)b.appendChild(document.createElement('i'))})();
 
