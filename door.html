@@ -79,7 +79,7 @@ function show(r,justMarked){
   if(!r.found){res.classList.add('no');$('big').textContent='Not found';$('why').textContent='No ticket has this code. Check the letters and try again.';return}
   row('Name',r.name);row('Code',r.code);row('Valid until',day(r.validUntil));
   if(justMarked){res.classList.add('ok');$('big').textContent='Marked used';$('why').textContent='Let them in: '+(r.name||'guest')+' plus one. This ticket is now spent.';row('Used',when(r.usedAt));row('Event',r.usedNote);return}
-  if(r.valid){res.classList.add('ok');$('big').textContent='Valid';$('why').textContent='Admit '+(r.name||'guest')+' plus one, then mark it used.';$('usebox').hidden=false;return}
+  if(r.valid){res.classList.add('ok');$('big').textContent='Valid';$('why').textContent='Admit '+(r.name||'guest')+' plus one, then mark it used. Do NOT accept at Can You Jigit?, Why So Serious?, New Year\u2019s Eve, or any event run with another promoter.';$('usebox').hidden=false;return}
   if(r.status==='Used'){res.classList.add('no');$('big').textContent='Already used';$('why').textContent='This ticket was spent on '+when(r.usedAt)+'.';row('Event',r.usedNote);return}
   if(r.expired){res.classList.add('no');$('big').textContent='Expired';$('why').textContent='This ticket ran out on '+day(r.validUntil)+'.';return}
   res.classList.add('warn');$('big').textContent='Not claimed';$('why').textContent='This code was pulled from the machine but nobody claimed it, so it is not valid.';
