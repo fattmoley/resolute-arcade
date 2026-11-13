@@ -71,7 +71,19 @@ button,select,input{font:inherit;color:inherit}
 .again:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--hard)}
 .acts a{font-family:var(--display);font-weight:800;font-stretch:112%;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:inherit;text-underline-offset:4px;text-decoration-thickness:2px}
 @media (max-width:420px){:root{--d:16px;--rise:9.24px}.band{padding:9px}.band p{font-size:9.5px}}
-@media (max-width:480px){.band h1{font-size:clamp(14px,4.2vw,28px)}}
+/* phones: the title gets the room, the controls are sized to fit, and the machine sits near the top */
+@media (max-width:480px){
+  body{padding-block:10px 32px}
+  .band .inv{display:none}
+  .band h1{font-size:clamp(17px,5.6vw,26px)}
+  .lcd{font-size:11px;letter-spacing:.06em;padding-inline:12px}
+  .tank{padding:12px}
+  .deck{padding:16px 12px 14px;gap:12px}
+  .stick{gap:8px}
+  .rnd{width:50px;height:50px}
+  .drop{max-width:none;height:58px;font-size:20px}
+  .base{padding:12px}
+}
 .cab{--top:var(--pk);--lid:var(--yl);--side:var(--li)}
 .lcd{background:var(--ink);color:var(--yl);border-inline:3px solid var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;min-height:38px;display:flex;align-items:center;gap:10px}
 .lcd::before{content:"";flex:none;width:9px;height:9px;background:var(--or);transform:rotate(45deg)}
@@ -80,12 +92,12 @@ button,select,input{font:inherit;color:inherit}
 .glass{display:block;width:100%;aspect-ratio:400/440;border:3px solid var(--ink);background:repeating-linear-gradient(30deg,var(--grid) 0 1px,transparent 1px 14px),repeating-linear-gradient(150deg,var(--grid) 0 1px,transparent 1px 14px),repeating-linear-gradient(90deg,var(--grid) 0 1px,transparent 1px 16.17px),var(--glass);touch-action:none;cursor:crosshair}
 .deck{background:var(--squig),var(--pk);border:3px solid var(--ink);border-bottom:0;padding:18px 16px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
 .stick{display:flex;gap:10px}
-.rnd{width:54px;height:54px;border-radius:50%;border:3px solid var(--ink);background:var(--paper);font-size:18px;line-height:1;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:transform .06s,box-shadow .06s;touch-action:none;user-select:none;-webkit-user-select:none}
+.rnd{width:54px;height:54px;border-radius:50%;border:3px solid var(--ink);background:var(--paper);padding:0;display:grid;place-items:center;color:var(--ink);cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:transform .06s,box-shadow .06s;touch-action:none;user-select:none;-webkit-user-select:none}
 .rnd:active,.rnd.on{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
 .drop{justify-self:center;width:100%;max-width:150px;height:62px;border:3px solid var(--ink);background:var(--yl);font-family:var(--display);font-weight:900;font-stretch:125%;font-size:22px;letter-spacing:.04em;cursor:pointer;box-shadow:5px 5px 0 var(--ink);transition:transform .06s,box-shadow .06s}
 .drop:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
 .drop:disabled{background:var(--paper);color:rgba(10,10,11,.45);cursor:default}
-.shake{width:58px;height:54px;border:3px solid var(--ink);background:var(--li);font-family:var(--display);font-weight:900;font-stretch:112%;font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:transform .06s,box-shadow .06s}
+.shake{min-width:62px;height:54px;padding:0 7px;border:3px solid var(--ink);background:var(--li);font-family:var(--display);font-weight:900;font-stretch:112%;font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;box-shadow:4px 4px 0 var(--ink);transition:transform .06s,box-shadow .06s}
 .shake:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
 .base{background:var(--li);border:3px solid var(--ink);padding:14px 16px 16px;display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;justify-content:space-between}
 .pill{font-family:var(--display);font-weight:800;font-stretch:112%;font-size:10px;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
@@ -128,8 +140,8 @@ button,select,input{font:inherit;color:inherit}
     <div class="tank"><canvas class="glass" id="glass" width="800" height="880" role="img" aria-label="Glass tank full of capsules with a claw above them. Tap anywhere to send the claw there."></canvas></div>
     <div class="deck">
       <div class="stick">
-        <button class="rnd" id="left" type="button" aria-label="Move claw left">&#9664;</button>
-        <button class="rnd" id="right" type="button" aria-label="Move claw right">&#9654;</button>
+        <button class="rnd" id="left" type="button" aria-label="Move claw left"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M13.5 2.5v13L3 9z" fill="currentColor"/></svg></button>
+        <button class="rnd" id="right" type="button" aria-label="Move claw right"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M4.5 2.5v13L15 9z" fill="currentColor"/></svg></button>
       </div>
       <button class="drop" id="drop" type="button">DROP</button>
       <button class="shake" id="shake" type="button" aria-label="Shake the machine">Shake</button>
