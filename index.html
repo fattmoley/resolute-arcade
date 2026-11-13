@@ -49,6 +49,8 @@ button,select,input{font:inherit;color:inherit}
 .band p{flex:0 0 auto;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:10.5px;line-height:1.25;letter-spacing:.08em;text-transform:uppercase}
 .band p b{font-weight:900;font-size:13px;letter-spacing:.02em}
 .band .inv{background:var(--ink);color:var(--paper)}
+.band .goldtag{display:none;flex:0 0 auto;background:var(--yl);color:var(--ink);text-decoration:none;font-family:var(--display);font-weight:800;font-stretch:112%;font-size:9.5px;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;touch-action:manipulation}
+.band .goldtag b{font-weight:900;font-size:13px;letter-spacing:.02em}
 
 /* ---------- the paperwork beside it ---------- */
 .side{flex:1 1 320px;min-width:0;max-width:480px;display:flex;flex-direction:column;gap:28px;padding-top:var(--rise)}
@@ -79,8 +81,11 @@ button,select,input{font:inherit;color:inherit}
 /* phones: the title gets the room, the controls are sized to fit, and the machine sits near the top */
 @media (max-width:480px){
   body{padding-block:10px 32px}
-  .band .inv{display:none}
-  .band h1{font-size:clamp(17px,5.6vw,26px)}
+  .band .inv,.band .arch{display:none}
+  .band .goldtag{display:flex}
+  .band h1{font-size:clamp(15px,4.9vw,24px)}
+  .band .goldtag{padding-inline:8px}
+  .band .goldtag b{font-size:12px}
   .lcd{font-size:11px;letter-spacing:.06em;padding-inline:12px}
   .tank{padding:12px}
   .deck{padding:16px 12px 14px;gap:12px}
@@ -89,6 +94,7 @@ button,select,input{font:inherit;color:inherit}
   .drop{max-width:none;height:58px;font-size:20px}
   .base{padding:12px}
 }
+@media (max-width:350px){.band h1{font-size:13px}.band .goldtag{font-size:8.5px;padding-inline:6px}.band .goldtag b{font-size:10.5px}}
 .cab{--top:var(--pk);--lid:var(--yl);--side:var(--li)}
 .lcd{background:var(--ink);color:var(--yl);border-inline:3px solid var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;min-height:38px;display:flex;align-items:center;gap:10px}
 .lcd::before{content:"";flex:none;width:9px;height:9px;background:var(--or);transform:rotate(45deg)}
@@ -165,7 +171,8 @@ button,select,input{font:inherit;color:inherit}
   <section class="cab" aria-label="Flyer machine">
     <header class="band">
       <h1>Flyer<br>Machine</h1>
-      <p><b>ReSolute</b>Archives</p>
+      <p class="arch"><b>ReSolute</b>Archives</p>
+      <a class="goldtag" id="goldtag" href="#goldnote"><b>Golden ticket</b>How to win ↓</a>
       <p class="inv"><b>Free</b>Play</p>
     </header>
     <div class="lcd" aria-live="polite"><span id="lcd">Warming up the claw</span></div>
@@ -202,7 +209,7 @@ button,select,input{font:inherit;color:inherit}
       <li><kbd>Shake</kbd><span>Rummage. Each capsule is the colour of the flyer inside it.</span></li>
       <li><kbd>Gold ball</kbd><span>One ball in there is solid gold. Grab it and crack it open.</span></li>
     </ul>
-    <div class="goldnote">
+    <div class="goldnote" id="goldnote">
       <h2>The golden ball</h2>
       <p>One ball in the machine is gold, and it likes to hide at the bottom. Fish it out and crack it open: once a week there is a <b>golden ticket</b> inside, which puts you and a friend on the list for any ReSolute night. The rest of the time it holds something stranger.</p>
       <p class="tiny">Not valid for events run with another promoter.</p>
@@ -289,6 +296,9 @@ function setEra(v){pool=DATA.filter(function(e){return inEra(e,v)});balls=[];spa
 function pick(){var used={};balls.forEach(function(b){if(b.e)used[key(b.e)]=1});var fresh=pool.filter(function(e){return !pulled[key(e)]&&!used[key(e)]});var from=fresh.length?fresh:pool.filter(function(e){return !used[key(e)]});if(!from.length)from=pool;return from[Math.floor(Math.random()*from.length)]}
 function hasGold(){return balls.some(function(b){return b.gold})}
 /* the golden ball always starts at the bottom of the pile, so it has to be dug out */
+// The machine only tops itself up once six flyers have been pulled, then drops the whole batch back in.
+var FULL=29,BATCH=6;
+function restock(){var n=balls.filter(function(b){return !b.gold}).length,k;if(n>FULL-BATCH)return;say('Restocking',1800);for(k=0;k<FULL-n;k++)setTimeout(function(){spawn(false)},k*150)}
 function spawnGold(){var r=24;balls.push({gold:true,e:null,r:r,x:HOLE+12+r+Math.random()*(TW-HOLE-24-2*r),y:TH-r-2-Math.random()*24,vx:0,vy:0,a:Math.random()*6.28,c:'#FFCB2E',held:false,hole:false})}
 function spawn(scatter){var e=pick();if(!e)return;var r=21+Math.random()*4;balls.push({e:e,r:r,x:HOLE+12+r+Math.random()*(TW-HOLE-24-2*r),y:scatter?TH-r-Math.random()*300:-r-10,vx:(Math.random()-.5)*2,vy:0,a:Math.random()*6.28,c:'#'+(e.col||'ae97e0'),held:false,hole:false})}
 
@@ -340,7 +350,7 @@ function clawStep(){
     if(claw.t===3&&claw.ball){b=claw.ball;b.held=false;b.hole=true;b.vx=0;b.vy=2}
     if(claw.ball&&claw.ball.y>TH+claw.ball.r+6){b=claw.ball;claw.ball=null;balls.splice(balls.indexOf(b),1);claw.state='back';if(b.gold)goldWin();else win(b.e)}
   } else if(claw.state==='back'){
-    claw.x+=4;if(claw.x>=claw.tx||claw.x>=TW/2){claw.state='idle';claw.tx=claw.x;$('drop').disabled=false;spawn(false);if(!hasGold())spawnGold()}
+    claw.x+=4;if(claw.x>=claw.tx||claw.x>=TW/2){claw.state='idle';claw.tx=claw.x;$('drop').disabled=false;restock();if(!hasGold())spawnGold()}
   }
   if(claw.ball&&claw.ball.held){claw.ball.x=claw.x;claw.ball.y=claw.y+ARM+claw.ball.r*.55;claw.ball.vx=claw.ball.vy=0}
 }
@@ -543,6 +553,8 @@ fetch('index.json').then(function(r){if(!r.ok)throw new Error(r.status);return r
 }).catch(function(){say('The archive did not load. Reload the page.',60000)});
 requestAnimationFrame(loop);
 })();
+
+;(function(){var t=document.getElementById('goldtag'),n=document.getElementById('goldnote');if(t&&n)t.addEventListener('click',function(e){e.preventDefault();n.scrollIntoView({behavior:'smooth',block:'center'})})})();
 </script>
 </body>
 </html>
