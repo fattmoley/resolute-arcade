@@ -76,6 +76,7 @@ button,select,input{font:inherit;color:inherit}
 .acts{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:center}
 .again{min-height:50px;padding:10px 24px;border:3px solid var(--ink);background:var(--yl);color:var(--ink);font-family:var(--display);font-weight:900;font-stretch:125%;font-size:15px;letter-spacing:.03em;text-transform:uppercase;cursor:pointer;box-shadow:5px 5px 0 var(--hard);transition:transform .06s,box-shadow .06s}
 .again:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--hard)}
+.acts a.photos{background:var(--yl);color:var(--ink);border:3px solid var(--ink);padding:11px 14px;text-decoration:none;box-shadow:4px 4px 0 var(--ink);touch-action:manipulation}
 .acts a{font-family:var(--display);font-weight:800;font-stretch:112%;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:inherit;text-underline-offset:4px;text-decoration-thickness:2px}
 @media (max-width:420px){:root{--d:16px;--rise:9.24px}.band{padding:9px}.band p{font-size:9.5px}}
 /* phones: the title gets the room, the controls are sized to fit, and the machine sits near the top */
@@ -247,7 +248,7 @@ button,select,input{font:inherit;color:inherit}
       <p class="src" id="psrc"></p>
       <h3 id="ptitle"></h3>
       <dl id="pmeta"></dl>
-      <div class="acts"><button class="again" id="again" type="button">Go again</button><a id="plink" target="_blank" rel="noopener" hidden></a></div>
+      <div class="acts"><button class="again" id="again" type="button">Go again</button><a id="pphotos" class="photos" target="_blank" rel="noopener" hidden>Photos from this night ↗</a><a id="plink" target="_blank" rel="noopener" hidden></a></div>
     </div>
   </div>
   <div class="goldbox" id="gbox" hidden>
@@ -445,6 +446,14 @@ function ensure(e){var n=('00'+e.b).slice(-3);if(!bundles[n])bundles[n]=fetch('b
 function when(d){if(/^\d{4}$/.test(d))return d;try{return new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}catch(x){return d}}
 var SRC={ra:'From Resident Advisor',fb:'From Facebook',site:'From the old website',ig:'From Instagram'};
 function row(k,v){var d=document.createElement('div'),a=document.createElement('dt'),b=document.createElement('dd');a.textContent=k;b.textContent=v;d.appendChild(a);d.appendChild(b);return d}
+/* Nights we have a photo album for. A flyer matches when its date and a word in its title both fit, so two events on one date cannot be mixed up. */
+var ALBUMS=[
+  {d:'2026-06-20',m:/theo parrish/i,u:'https://www.resolutenyc.com/theo-parrish-2026'},
+  {d:'2025-05-31',m:/villalobos/i,u:'https://www.resolutenyc.com/new-page-3'},
+  {d:'2024-06-09',m:/louie vega/i,u:'https://www.resolutenyc.com/louie-vegas-birthday'},
+  {d:'2023-03-03',m:/raresh/i,u:'https://www.resolutenyc.com/ben-ufo-raresh'}
+];
+function album(e){if(!e||!e.d)return null;for(var i=0;i<ALBUMS.length;i++)if(ALBUMS[i].d===e.d&&ALBUMS[i].m.test(e.t||''))return ALBUMS[i];return null}
 function show(e,fromShelf){
   var art=$('art');art.textContent='';var ph=document.createElement('div');ph.className='ph';ph.textContent='Unrolling the flyer';art.appendChild(ph);
   ensure(e).then(function(src){var im=new Image();im.alt=(e.t||'ReSolute flyer')+(e.d?', '+when(e.d):'');im.onload=function(){art.textContent='';art.appendChild(im)};im.src=src}).catch(function(){ph.textContent='The flyer got stuck in the chute. Close this and pull again.'});
@@ -455,6 +464,7 @@ function show(e,fromShelf){
   m.appendChild(row('Where',[e.v||'Secret location',e.c].filter(Boolean).join(', ')));
   m.appendChild(row('Who',e.a&&e.a.length?e.a.join(', '):'Line-up kept quiet'));
   var l=$('plink');if(e.u){l.href=e.u;l.textContent=e.s==='ra'?'Event on RA ↗':e.s==='fb'?'Event on Facebook ↗':'See the post ↗';l.hidden=false}else l.hidden=true;
+  var al=album(e),ph2=$('pphotos');if(al){ph2.href=al.u;ph2.hidden=false}else ph2.hidden=true;
   $('prize').hidden=false;$('again').focus();
   if(!fromShelf){say('Out it comes',6000);beep(660,.09);setTimeout(function(){beep(880,.09)},90);setTimeout(function(){beep(1320,.18)},180)}
 }
@@ -524,7 +534,7 @@ function crack(){
   });
 }
 var CLAIM_ERR={name:'Add your name so the door knows who you are.',email:'That email does not look right. Check it and try again.',too_late:'Too slow. This ticket went back in the machine.',already_claimed:'This ticket has already been claimed.',not_found:'The machine cannot find this ticket. Try again.'};
-if(GOLDTEST)window.__gold=goldWin;   /* test hook, only with ?goldtest=1 */
+if(GOLDTEST){window.__gold=goldWin;window.__show=function(i){show(DATA[i],true)}}   /* test hook, only with ?goldtest=1 */
 $('crack').addEventListener('click',crack);
 $('gbclose').addEventListener('click',closePrize);
 $('gtclose').addEventListener('click',closePrize);
