@@ -108,6 +108,37 @@ button,select,input{font:inherit;color:inherit}
 .door span:last-child{flex:none;border-left:2.5px solid var(--ink)}
 .door b{font-weight:900;color:var(--or)}
 
+/* ---------- the golden ball ---------- */
+.goldnote{background:var(--yl);color:var(--ink);border:3px solid var(--ink);padding:14px 16px 12px;box-shadow:6px 6px 0 var(--pop)}
+.goldnote h2{background:var(--ink);color:var(--yl);margin:0 0 10px}
+.goldnote p{margin:0 0 8px;font-weight:600;font-size:15.5px;line-height:1.4}
+.goldnote .tiny{font-size:12.5px;font-weight:600;margin:0}
+.goldbox{width:100%;max-width:520px;text-align:center;display:grid;gap:18px;justify-items:center}
+.goldbox h3{margin:0;font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(24px,5vw,38px);line-height:1}
+.goldbox p{margin:0;font-weight:600;max-width:36ch}
+.bigball{position:relative;width:150px;height:150px;border:3px solid var(--ink);border-radius:50%;background:radial-gradient(circle at 34% 30%,#FFF3B0 0 9%,transparent 10%),linear-gradient(#FFCB2E 50%,#E0A100 50%);box-shadow:7px 7px 0 var(--hard);animation:bob 1.6s ease-in-out infinite alternate}
+.bigball::before{content:"";position:absolute;left:-3px;right:-3px;top:50%;height:3px;background:var(--ink);transform:translateY(-50%)}
+.bigball::after{content:"★";position:absolute;inset:0;display:grid;place-items:center;font-size:54px;line-height:1;color:var(--ink)}
+.bigball.crack{animation:crack .7s ease-in both}
+@keyframes bob{to{transform:translateY(-8px) rotate(4deg)}}
+@keyframes crack{0%{transform:rotate(0)}20%{transform:rotate(-9deg)}40%{transform:rotate(9deg)}60%{transform:rotate(-12deg) scale(1.05)}100%{transform:scale(1.6);opacity:0}}
+.slip{width:100%;max-width:400px;background:var(--paper);color:var(--ink);border:3px solid var(--ink);padding:14px 16px 16px;text-align:left;box-shadow:6px 6px 0 var(--pop);font-weight:700;font-size:18px;line-height:1.3}
+.slip b{display:block;font-family:var(--display);font-weight:900;font-stretch:125%;font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;padding-bottom:7px;border-bottom:2.5px solid var(--ink)}
+.gt{position:relative;width:100%;max-width:520px;color:var(--ink);background:var(--yl);border:3px solid var(--ink);padding:22px 24px 46px;text-align:center;box-shadow:8px 8px 0 var(--hard)}
+.gt .k{display:inline-block;background:var(--paper);border:2.5px solid var(--ink);padding:5px 10px 4px;font-family:var(--display);font-weight:900;font-stretch:112%;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase}
+.gt h3{margin:12px 0 8px;font-family:var(--display);font-weight:900;font-stretch:125%;text-transform:uppercase;font-size:clamp(26px,7vw,44px);line-height:.95}
+.gt p{margin:0 auto;max-width:40ch;font-weight:600}
+.gt .code{display:inline-block;margin:16px 0 6px;padding:9px 16px 8px;border:2.5px solid var(--ink);background:var(--paper);font-family:var(--mono);font-weight:500;font-size:clamp(17px,5vw,24px);letter-spacing:.12em}
+.gt .fine{font-size:12.5px;font-weight:600;margin:10px auto 14px;max-width:44ch}
+.gt .bar{position:absolute;left:24px;right:24px;bottom:14px;height:18px;background:var(--bars)}
+.gt .again{box-shadow:5px 5px 0 var(--ink);background:var(--paper)}
+.gform{display:grid;gap:6px;max-width:340px;margin:16px auto 4px;text-align:left}
+.gform label{font-family:var(--display);font-weight:900;font-stretch:112%;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.gform input{font:inherit;font-size:17px;padding:10px 12px;border:2.5px solid var(--ink);border-radius:0;background:var(--paper);color:var(--ink);width:100%;margin-bottom:6px}
+.gform .again{margin-top:6px;justify-self:center}
+.gform #gerr{min-height:1.4em;text-align:center;font-weight:700;margin:4px 0 0}
+@media (prefers-reduced-motion:reduce){.bigball,.bigball.crack{animation:none}}
+
 /* the how-to reads like a line-up box: bold names, ruled lines, a tail pointing at the machine */
 .how{margin:0;padding:4px 16px;list-style:none;background:var(--paper);color:var(--ink);border:3px solid var(--ink);position:relative;box-shadow:6px 6px 0 var(--pop)}
 .how::before{content:"";position:absolute;left:-12px;top:22px;width:18px;height:18px;background:var(--paper);border-left:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg)}
@@ -168,7 +199,13 @@ button,select,input{font:inherit;color:inherit}
       <li><kbd>Tap the glass</kbd><span>The claw goes there and drops.</span></li>
       <li><kbd>◀ ▶ + Drop</kbd><span>Or drive it yourself. Arrow keys and space work too.</span></li>
       <li><kbd>Shake</kbd><span>Rummage. Each capsule is the colour of the flyer inside it.</span></li>
+      <li><kbd>Gold ball</kbd><span>One ball in there is solid gold. Grab it and crack it open.</span></li>
     </ul>
+    <div class="goldnote">
+      <h2>The golden ball</h2>
+      <p>One ball in the machine is gold, and it likes to hide at the bottom. Fish it out and crack it open: once a week there is a <b>golden ticket</b> inside, which puts you and a friend on the list for a regular ReSolute night. The rest of the time it holds something stranger.</p>
+      <p class="tiny">Not valid for Can You Jigit?, Why So Serious?, New Year’s Eve, or events run with another promoter.</p>
+    </div>
     <div>
       <h2>Your recent pulls</h2>
       <div class="shelf" id="shelf" hidden></div>
@@ -186,6 +223,30 @@ button,select,input{font:inherit;color:inherit}
       <dl id="pmeta"></dl>
       <div class="acts"><button class="again" id="again" type="button">Go again</button><a id="plink" target="_blank" rel="noopener" hidden></a></div>
     </div>
+  </div>
+  <div class="goldbox" id="gbox" hidden>
+    <h3 id="gbtitle">You got the golden ball</h3>
+    <div class="bigball" id="bigball" aria-hidden="true"></div>
+    <div class="slip" id="slip" hidden><b id="slipk"></b><span id="slipt"></span></div>
+    <p id="gbtext">There might be a golden ticket inside. There might not.</p>
+    <button class="again" id="crack" type="button">Crack it open</button>
+    <button class="again" id="gbclose" type="button" hidden>Keep playing</button>
+  </div>
+  <div class="gt" id="gt" hidden>
+    <div class="k">ReSolute · Admit two</div>
+    <h3>Golden ticket</h3>
+    <p>It was in there. You and one friend are on the list for one regular ReSolute night of your choice.</p>
+    <div class="code" id="gcode">RS-0000-0000</div>
+    <div class="fine" id="gfine"></div>
+    <form class="gform" id="gform" novalidate hidden>
+      <label for="gname">Your name</label><input id="gname" name="name" type="text" autocomplete="name" maxlength="80" required>
+      <label for="gemail">Your email</label><input id="gemail" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" required>
+      <button class="again" id="gclaim" type="submit">Claim my ticket</button>
+      <p class="fine" id="gerr" role="alert"></p>
+    </form>
+    <div class="fine" id="ghow"></div>
+    <button class="again" id="gtclose" type="button">Back to the machine</button>
+    <i class="bar"></i>
   </div>
 </div>
 
@@ -223,8 +284,11 @@ new MutationObserver(readCols).observe(document.documentElement,{attributes:true
 
 /* ---------- the pool ---------- */
 function inEra(e,v){if(v==='all')return true;if(v==='mystery')return !e.d;if(!e.d)return false;var y=+e.d.slice(0,4),p=v.split('-');return y>=+p[0]&&y<=+p[1]}
-function setEra(v){pool=DATA.filter(function(e){return inEra(e,v)});balls=[];for(var i=0;i<30;i++)spawn(true)}
-function pick(){var used={};balls.forEach(function(b){used[key(b.e)]=1});var fresh=pool.filter(function(e){return !pulled[key(e)]&&!used[key(e)]});var from=fresh.length?fresh:pool.filter(function(e){return !used[key(e)]});if(!from.length)from=pool;return from[Math.floor(Math.random()*from.length)]}
+function setEra(v){pool=DATA.filter(function(e){return inEra(e,v)});balls=[];spawnGold();for(var i=0;i<29;i++)spawn(true)}
+function pick(){var used={};balls.forEach(function(b){if(b.e)used[key(b.e)]=1});var fresh=pool.filter(function(e){return !pulled[key(e)]&&!used[key(e)]});var from=fresh.length?fresh:pool.filter(function(e){return !used[key(e)]});if(!from.length)from=pool;return from[Math.floor(Math.random()*from.length)]}
+function hasGold(){return balls.some(function(b){return b.gold})}
+/* the golden ball always starts at the bottom of the pile, so it has to be dug out */
+function spawnGold(){var r=24;balls.push({gold:true,e:null,r:r,x:HOLE+12+r+Math.random()*(TW-HOLE-24-2*r),y:TH-r-2-Math.random()*24,vx:0,vy:0,a:Math.random()*6.28,c:'#FFCB2E',held:false,hole:false})}
 function spawn(scatter){var e=pick();if(!e)return;var r=21+Math.random()*4;balls.push({e:e,r:r,x:HOLE+12+r+Math.random()*(TW-HOLE-24-2*r),y:scatter?TH-r-Math.random()*300:-r-10,vx:(Math.random()-.5)*2,vy:0,a:Math.random()*6.28,c:'#'+(e.col||'ae97e0'),held:false,hole:false})}
 
 /* ---------- physics ---------- */
@@ -263,7 +327,7 @@ function clawStep(){
       claw.ball=best||null}
   } else if(claw.state==='grip'){
     claw.t++;claw.open=Math.max(0,1-claw.t/16);
-    if(claw.t>18){if(claw.ball){claw.ball.held=true;claw.slip=Math.random()<.12?REST+40+Math.random()*120:0;beep(520,.08);ensure(claw.ball.e)}else{say(MISS[Math.floor(Math.random()*MISS.length)]);beep(120,.25,'sawtooth')}claw.state='lift'}
+    if(claw.t>18){if(claw.ball){claw.ball.held=true;claw.slip=Math.random()<.12?REST+40+Math.random()*120:0;beep(520,.08);if(claw.ball.e)ensure(claw.ball.e)}else{say(MISS[Math.floor(Math.random()*MISS.length)]);beep(120,.25,'sawtooth')}claw.state='lift'}
   } else if(claw.state==='lift'){
     claw.y-=3.4;
     if(claw.ball&&claw.slip&&claw.y<claw.slip){b=claw.ball;b.held=false;b.vy=1;b.vx=(Math.random()-.5)*3;claw.ball=null;claw.open=1;say(SLIP[Math.floor(Math.random()*SLIP.length)]);beep(200,.2,'triangle');beep(140,.3,'triangle')}
@@ -273,15 +337,29 @@ function clawStep(){
   } else if(claw.state==='release'){
     claw.t++;claw.open=Math.min(1,claw.t/8);
     if(claw.t===3&&claw.ball){b=claw.ball;b.held=false;b.hole=true;b.vx=0;b.vy=2}
-    if(claw.ball&&claw.ball.y>TH+claw.ball.r+6){b=claw.ball;claw.ball=null;balls.splice(balls.indexOf(b),1);claw.state='back';win(b.e)}
+    if(claw.ball&&claw.ball.y>TH+claw.ball.r+6){b=claw.ball;claw.ball=null;balls.splice(balls.indexOf(b),1);claw.state='back';if(b.gold)goldWin();else win(b.e)}
   } else if(claw.state==='back'){
-    claw.x+=4;if(claw.x>=claw.tx||claw.x>=TW/2){claw.state='idle';claw.tx=claw.x;$('drop').disabled=false;spawn(false)}
+    claw.x+=4;if(claw.x>=claw.tx||claw.x>=TW/2){claw.state='idle';claw.tx=claw.x;$('drop').disabled=false;spawn(false);if(!hasGold())spawnGold()}
   }
   if(claw.ball&&claw.ball.held){claw.ball.x=claw.x;claw.ball.y=claw.y+ARM+claw.ball.r*.55;claw.ball.vx=claw.ball.vy=0}
 }
 
 /* ---------- drawing ---------- */
+function drawGold(b){
+  var t=Date.now()/1000,pulse=.5+.5*Math.sin(t*3);
+  cx.save();cx.translate(b.x,b.y);
+  cx.globalAlpha=.35+.4*pulse;cx.strokeStyle='#FFF3B0';cx.lineWidth=3;cx.beginPath();cx.arc(0,0,b.r+4+pulse*2.5,0,Math.PI*2);cx.stroke();cx.globalAlpha=1;
+  cx.rotate(b.a);
+  cx.beginPath();cx.arc(0,0,b.r,0,Math.PI*2);cx.fillStyle='#FFCB2E';cx.fill();
+  cx.beginPath();cx.arc(0,0,b.r,0,Math.PI);cx.closePath();cx.fillStyle='#E0A100';cx.fill();
+  cx.lineWidth=2.8;cx.strokeStyle=col.ink;cx.beginPath();cx.arc(0,0,b.r,0,Math.PI*2);cx.stroke();
+  cx.beginPath();cx.moveTo(-b.r,0);cx.lineTo(b.r,0);cx.stroke();
+  cx.fillStyle=col.ink;cx.beginPath();for(var i=0;i<10;i++){var rr=i%2?b.r*.2:b.r*.48,an=-Math.PI/2+i*Math.PI/5;cx.lineTo(Math.cos(an)*rr,Math.sin(an)*rr)}cx.closePath();cx.fill();
+  cx.lineWidth=2.6;cx.strokeStyle='#FFF7CC';cx.beginPath();cx.arc(0,0,b.r*.7,Math.PI*1.12,Math.PI*1.42);cx.stroke();
+  cx.restore();
+}
 function drawBall(b){
+  if(b.gold){drawGold(b);return}
   cx.save();cx.translate(b.x,b.y);cx.rotate(b.a);
   cx.beginPath();cx.arc(0,0,b.r,0,Math.PI*2);cx.fillStyle=col.paper;cx.fill();
   cx.beginPath();cx.arc(0,0,b.r,Math.PI,0);cx.closePath();cx.fillStyle=b.c;cx.fill();
@@ -354,7 +432,85 @@ function show(e,fromShelf){
 function win(e){pulled[key(e)]=1;save();count();recent=recent.filter(function(x){return x!==e});recent.unshift(e);recent=recent.slice(0,12);shelf();show(e,false)}
 function count(){var n=0;DATA.forEach(function(e){if(pulled[key(e)])n++});$('count').textContent=n;$('total').textContent=DATA.length}
 function shelf(){var s=$('shelf');s.textContent='';recent.forEach(function(e){var b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Look again at '+(e.t||'mystery flyer'));var im=new Image();im.alt='';ensure(e).then(function(src){im.src=src});b.appendChild(im);b.addEventListener('click',function(){show(e,true)});s.appendChild(b)});s.hidden=!recent.length;$('empty').hidden=!!recent.length}
-function closePrize(){$('prize').hidden=true;$('drop').focus()}
+function closePrize(){$('prize').hidden=true;$('gbox').hidden=true;$('gt').hidden=true;document.querySelector('#prize .card').hidden=false;$('drop').focus()}
+
+/* ---------- the golden ball: once a week it holds the golden ticket ---------- */
+var GAPI='https://script.google.com/macros/s/AKfycbxrzUEIQiegPVzxcygIFnu94qMVkpBBWIKjOIyW150H2ETl-AB6gSAfLtPomPEbzuS8Sg/exec';
+var SURPRISE=[
+['Fortune','You will say one more track. There will be nine more tracks.'],
+['Fortune','Someone you met in a smoking area still thinks about your shoes.'],
+['Fortune','The afters will be better than the party. Go anyway.'],
+['Fortune','A stranger will hand you water at the exact right moment. Become that stranger.'],
+['Prescription','Bass, twice nightly. Do not operate group chats until Tuesday.'],
+['Prescription','One (1) disco nap, taken before midnight. Refills: unlimited.'],
+['Prescription','Earplugs. Take two and call us in the morning.'],
+['House rule','Be nice to the door. The door remembers.'],
+['House rule','No photos on the dance floor. Your memory is the archive.'],
+['House rule','If you can read this, you are standing too close to the speaker. Stay there.'],
+['Rave horoscope','Lucky number: 124. Lucky colour: fog.'],
+['Rave horoscope','Mercury is in the booth. Requests will be ignored.'],
+['Rave horoscope','Tonight you are a main room person. Tomorrow, a couch person.'],
+['Dare','Send this to the friend who always leaves early. Say nothing else.'],
+['Dare','Compliment the next DJ you see on a track they did not play.'],
+['Found in the ball','A tiny receipt. It says: one (1) vibe, paid in full.'],
+['Found in the ball','A note from the claw: I let you win.'],
+['Found in the ball','Nothing. Just warm air from a Brooklyn warehouse, sealed in 2008.'],
+['Found in the ball','A very small flyer for a party that already happened. It was great.']
+];
+var lastS=-1,ticket=null,GOLDTEST=/[?&]goldtest=1/.test(location.search);
+try{ticket=JSON.parse(localStorage.getItem('rs-nek-ticket')||'null')}catch(e){}
+function saveT(){try{localStorage.setItem('rs-nek-ticket',JSON.stringify(ticket))}catch(e){}}
+function gapi(o){return fetch(GAPI,{method:'POST',body:JSON.stringify(o)}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json()})}
+function day(ms){try{return new Date(ms).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}catch(e){return ''}}
+function goldWin(){
+  document.querySelector('#prize .card').hidden=true;$('gt').hidden=true;$('gbox').hidden=false;
+  $('bigball').className='bigball';$('bigball').hidden=false;$('slip').hidden=true;$('crack').hidden=false;$('crack').disabled=false;$('gbclose').hidden=true;
+  $('gbtitle').textContent='You got the golden ball';$('gbtext').hidden=false;$('gbtext').textContent='There might be a golden ticket inside. There might not.';
+  $('prize').hidden=false;$('crack').focus();say('The golden ball. Crack it open.',8000);[523,659,784].forEach(function(f,k){setTimeout(function(){beep(f,.12)},k*110)});
+}
+function showTicket(t){
+  $('gbox').hidden=true;$('gt').hidden=false;$('gcode').textContent=t.code;
+  var pend=!t.claimed&&!t.sample;
+  $('gfine').textContent=(t.name?t.name+' · ':'')+'Valid until '+day(t.validUntil)+' · Good for one night, two people · Not valid for Can You Jigit?, Why So Serious?, New Year’s Eve, or events run with another promoter.';
+  $('gform').hidden=!pend;$('gerr').textContent='';$('gclaim').disabled=false;
+  $('ghow').textContent=t.sample?'Test ticket. Not valid.':pend?'Claim it within '+Math.max(1,Math.round((t.claimBy-Date.now())/6e4))+' minutes or it goes back in the machine.':(t.mailed===false?'We could not send the email. Screenshot this ticket and keep it safe.':'We emailed this ticket to '+t.email+'. Show it at the door.');
+  (pend?$('gname'):$('gtclose')).focus();
+}
+function noTicket(note){
+  var k;do{k=Math.floor(Math.random()*SURPRISE.length)}while(k===lastS);lastS=k;
+  $('gbtitle').textContent='No ticket this time';$('slipk').textContent=SURPRISE[k][0];$('slipt').textContent=SURPRISE[k][1];$('slip').hidden=false;
+  $('gbtext').hidden=!note;if(note)$('gbtext').textContent=note;
+  $('gbclose').hidden=false;$('gbclose').focus();say('No ticket. The gold ball rolls back in.',5000);beep(196,.3,'triangle');
+}
+function crack(){
+  $('crack').disabled=true;$('bigball').className='bigball crack';$('gbtext').hidden=true;beep(140,.5,'sawtooth',.04);
+  var wait=new Promise(function(r){setTimeout(r,750)});
+  var draw=GOLDTEST?Promise.resolve({won:true,sample:true,code:'RS-TEST-0000',validUntil:Date.now()+365*864e5}):GAPI?gapi({action:'draw'}).catch(function(){return {err:1}}):Promise.resolve(null);
+  Promise.all([draw,wait]).then(function(a){
+    var r=a[0];$('bigball').hidden=true;$('crack').hidden=true;
+    if(r&&r.won){
+      ticket=r.sample?{code:r.code,validUntil:r.validUntil,sample:true}:{code:r.code,key:r.key,wonAt:r.wonAt,validUntil:r.validUntil,claimBy:r.claimBy};if(!r.sample)saveT();
+      showTicket(ticket);say('GOLDEN TICKET.',9000);[660,880,1100,1320].forEach(function(f,k){setTimeout(function(){beep(f,.16)},k*120)});
+    }else noTicket(r&&r.err?'The ticket drawer did not answer, so this one does not count. Try the gold ball again later.':'');
+  });
+}
+var CLAIM_ERR={name:'Add your name so the door knows who you are.',email:'That email does not look right. Check it and try again.',too_late:'Too slow. This ticket went back in the machine.',already_claimed:'This ticket has already been claimed.',not_found:'The machine cannot find this ticket. Try again.'};
+if(GOLDTEST)window.__gold=goldWin;   /* test hook, only with ?goldtest=1 */
+$('crack').addEventListener('click',crack);
+$('gbclose').addEventListener('click',closePrize);
+$('gtclose').addEventListener('click',closePrize);
+$('gform').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  if(!GAPI||!ticket||ticket.claimed||ticket.sample)return;
+  var name=$('gname').value.trim(),email=$('gemail').value.trim();
+  if(!name){$('gerr').textContent=CLAIM_ERR.name;$('gname').focus();return}
+  if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(email)){$('gerr').textContent=CLAIM_ERR.email;$('gemail').focus();return}
+  $('gclaim').disabled=true;$('gerr').textContent='Claiming…';
+  gapi({action:'claim',code:ticket.code,key:ticket.key,name:name,email:email}).then(function(r){
+    if(!r||!r.ok){$('gclaim').disabled=false;$('gerr').textContent=CLAIM_ERR[r&&r.error]||'Could not claim it just now. Try again.';if(r&&(r.error==='too_late'||r.error==='not_found')){ticket=null;saveT()}return}
+    ticket={code:r.code,wonAt:ticket.wonAt,validUntil:r.validUntil,name:r.name,email:email,claimed:true,mailed:r.mailed};saveT();showTicket(ticket);
+  },function(){$('gclaim').disabled=false;$('gerr').textContent='Could not reach the ticket drawer. Check your connection and try again.'});
+});
 
 /* ---------- controls ---------- */
 function hold(el,d){function on(ev){ev.preventDefault();if(claw.state==='idle'){dir=d;claw.auto=false;el.classList.add('on')}}function off(){if(dir===d)dir=0;el.classList.remove('on')}
