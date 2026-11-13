@@ -308,9 +308,11 @@ function drawClaw(){
   cx.strokeStyle=col.ink;cx.lineWidth=7;arms();cx.strokeStyle=col.paper;cx.lineWidth=2.2;arms();
   cx.strokeStyle=col.ink;cx.lineWidth=3;cx.beginPath();cx.moveTo(claw.x,claw.y+8);cx.lineTo(claw.x,t.y+4);cx.stroke();
   /* head */
-  cx.lineWidth=2.6;cx.fillStyle=col.yl;cx.beginPath();cx.rect(claw.x-14,claw.y-9,28,18);cx.fill();cx.stroke();
-  cx.fillStyle=col.ink;cx.beginPath();cx.arc(claw.x-6,claw.y-1,1.7,0,7);cx.arc(claw.x+6,claw.y-1,1.7,0,7);cx.fill();
-  cx.lineWidth=1.8;cx.beginPath();cx.arc(claw.x,claw.y,5.5,.15*Math.PI,.85*Math.PI);cx.stroke();
+  cx.lineWidth=2.6;cx.fillStyle=col.yl;cx.beginPath();cx.rect(claw.x-15,claw.y-12,30,22);cx.fill();cx.stroke();
+  cx.fillStyle=col.ink;cx.beginPath();cx.arc(claw.x-6,claw.y-.4,1.7,0,7);cx.arc(claw.x+6,claw.y-.4,1.7,0,7);cx.fill();
+  /* the house eyebrows: heavy, tapered, tilted in toward the nose */
+  [-1,1].forEach(function(s){cx.beginPath();cx.moveTo(claw.x+s*11.8,claw.y-8.4);cx.quadraticCurveTo(claw.x+s*7,claw.y-8.6,claw.x+s*2.2,claw.y-5.4);cx.lineTo(claw.x+s*2.9,claw.y-2.7);cx.quadraticCurveTo(claw.x+s*7,claw.y-5.6,claw.x+s*11.8,claw.y-8.4);cx.fill()});
+  cx.lineWidth=1.8;cx.lineCap='round';cx.beginPath();cx.arc(claw.x,claw.y+.6,5.6,.14*Math.PI,.86*Math.PI);cx.stroke();cx.lineCap='butt';
 }
 function draw(){
   var w=cv.width,h=cv.height;cx.setTransform(w/TW,0,0,h/TH,0,0);cx.clearRect(0,0,TW,TH);
