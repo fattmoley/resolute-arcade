@@ -3,6 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>html{touch-action:manipulation}button,canvas,.glass{touch-action:manipulation;-webkit-user-select:none;user-select:none}</style>
+<style>html.embedded,html.embedded body{background:transparent!important}html.embedded{color-scheme:light!important}html.embedded body{padding-top:8px}</style>
+<script>(function(){var r=document.documentElement,emb=window.top!==window.self;if(emb)r.classList.add('embedded');function set(t){if(t!=='dark'&&t!=='light')return;r.setAttribute('data-theme',t);if(emb)try{window.parent.postMessage({rsThemeAck:t},'*')}catch(e){}}var m=/[?&]theme=(dark|light)/.exec(location.search);if(m)set(m[1]);window.addEventListener('message',function(e){if(e.data&&e.data.rsTheme)set(e.data.rsTheme)})})();</script>
+</head>
+<body>
 <title>ReSolute Flyer Machine</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -155,10 +160,6 @@ button,select,input{font:inherit;color:inherit}
 @media (prefers-reduced-motion:reduce){.art img{animation:none}}
 @media (max-width:420px){.deck{gap:10px;padding-inline:12px}.rnd{width:48px;height:48px}.shake{width:52px;height:48px}.tank{padding:10px}.drop{font-size:19px}}
 </style>
-<style>html.embedded,html.embedded body{background:transparent!important}html.embedded{color-scheme:light!important}html.embedded body{padding-top:8px}</style>
-<script>(function(){var r=document.documentElement,emb=window.top!==window.self;if(emb)r.classList.add('embedded');function set(t){if(t!=='dark'&&t!=='light')return;r.setAttribute('data-theme',t);if(emb)try{window.parent.postMessage({rsThemeAck:t},'*')}catch(e){}}var m=/[?&]theme=(dark|light)/.exec(location.search);if(m)set(m[1]);window.addEventListener('message',function(e){if(e.data&&e.data.rsTheme)set(e.data.rsTheme)})})();</script>
-</head>
-<body>
 
 <div class="wrap">
   <section class="cab" aria-label="Flyer machine">
