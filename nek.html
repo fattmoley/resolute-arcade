@@ -341,7 +341,7 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
     </div>
     <div class="goldbox">
       <strong>The golden ticket</strong>
-      <p>One golden ticket hides in the machine each week. It gets you and a friend into one regular ReSolute night of your choice in the next 365 days. Not valid for Can You Jigit?, Why So Serious?, New Year’s Eve, or events run with another promoter. Once somebody pulls it, the machine goes seven days before another one can appear.</p>
+      <p>One golden ticket hides in the machine each week. It gets you and a friend into one ReSolute night of your choice in the next 365 days. Not valid for events run with another promoter. Once somebody pulls it, the machine goes seven days before another one can appear.</p>
       <p class="st" id="goldst">Checking the ticket drawer…</p>
       <div class="row" id="goldrow"><button class="btn" id="gprev" type="button">See a sample ticket</button><button class="btn" id="gmine" type="button" hidden>Show my ticket</button><button class="btn" id="greset" type="button" hidden>Reset the 7 days</button></div>
       <ul class="issued" id="issued" hidden></ul>
@@ -371,7 +371,7 @@ f.addEventListener('submit',function(ev){ev.preventDefault();var v=document.getE
       <span class="sample" id="gsample" hidden>Sample · not valid</span>
       <div class="k">ReSolute · Admit two</div>
       <h3 id="gtitle">Golden ticket</h3>
-      <p>He has spoken. You and one friend are on the list for one regular ReSolute night of your choice.</p>
+      <p>He has spoken. You and one friend are on the list for one ReSolute night of your choice.</p>
       <div class="code" id="gcode">RS-0000-0000</div>
       <div class="fine" id="gfine"></div>
       <form class="gform" id="gform" novalidate hidden>
@@ -479,7 +479,7 @@ function showGold(t,sample){
   $('pcard').hidden=true;$('gwrap').hidden=false;
   $('gsample').hidden=!sample;
   $('gcode').textContent=t.code;
-  $('gfine').textContent=(t.name?t.name+' · ':'Won '+day(t.wonAt)+' · ')+'Valid until '+day(t.validUntil)+' · Good for one night, two people · Not valid for Can You Jigit?, Why So Serious?, New Year’s Eve, or events run with another promoter.';
+  $('gfine').textContent=(t.name?t.name+' · ':'Won '+day(t.wonAt)+' · ')+'Valid until '+day(t.validUntil)+' · Good for one night, two people · Not valid for events run with another promoter.';
   var live=API&&!sample,pend=live&&!t.claimed;
   $('gform').hidden=!pend;$('gerr').textContent='';$('gclaim').disabled=false;
   $('gdl').hidden=!(live&&t.claimed);$('gmailed').hidden=!(live&&t.claimed);
@@ -615,11 +615,11 @@ function ticketImage(t){
   box(70,50,330,64,'#FFFFFF');box(416,50,330,64,INK);box(762,50,368,64,'#FFFFFF');
   x.font=D+'26px'+F;x.fillStyle=INK;x.fillText('RESOLUTE',235,93);x.fillStyle='#FFFFFF';x.fillText('ADMIT TWO',581,93);x.fillStyle=INK;x.fillText('ONE NIGHT',946,93);
   x.font=D+'96px'+F;x.lineJoin='round';x.fillStyle=INK;x.fillText('GOLDEN TICKET',W/2+7,229,W-150);x.lineWidth=10;x.strokeStyle=INK;x.strokeText('GOLDEN TICKET',W/2,222,W-150);x.fillStyle='#FFFFFF';x.fillText('GOLDEN TICKET',W/2,222,W-150);
-  x.fillStyle=INK;x.font='700 32px'+F;x.fillText((t.name||'You')+' + one friend, one regular ReSolute night',W/2,290,W-160);
+  x.fillStyle=INK;x.font='700 32px'+F;x.fillText((t.name||'You')+' + one friend, one ReSolute night',W/2,290,W-160);
   box(W/2-290,326,580,108,'#FFFFFF');
   x.fillStyle=INK;x.font='500 62px "IBM Plex Mono",Menlo,monospace';x.fillText(t.code,W/2,402);
   x.font='800 24px'+F;x.fillText('VALID UNTIL '+String(day(t.validUntil)).toUpperCase()+'  ·  ONE NIGHT, TWO PEOPLE',W/2,486,W-160);
-  x.font='700 19px'+F;x.fillText('NOT VALID FOR CAN YOU JIGIT?, WHY SO SERIOUS?, NEW YEAR’S EVE OR EVENTS WITH ANOTHER PROMOTER',W/2,514,W-150);
+  x.font='700 19px'+F;x.fillText('GOOD FOR ANY RESOLUTE NIGHT · NOT VALID FOR EVENTS WITH ANOTHER PROMOTER',W/2,514,W-150);
   x.font='500 19px'+F;x.fillText('Show this at the door. The door team checks the code and marks it used.',W/2,541,W-160);
   var bx=70,ws=[6,3,3,9,3,6,3,3,12,3,6,6,3,9,3,3];for(i=0;bx<W-70;i++){var bw=ws[i%ws.length];if(i%2===0)x.fillRect(bx,556,Math.min(bw,W-70-bx),40);bx+=bw}
   return c;

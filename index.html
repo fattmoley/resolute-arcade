@@ -204,8 +204,8 @@ button,select,input{font:inherit;color:inherit}
     </ul>
     <div class="goldnote">
       <h2>The golden ball</h2>
-      <p>One ball in the machine is gold, and it likes to hide at the bottom. Fish it out and crack it open: once a week there is a <b>golden ticket</b> inside, which puts you and a friend on the list for a regular ReSolute night. The rest of the time it holds something stranger.</p>
-      <p class="tiny">Not valid for Can You Jigit?, Why So Serious?, New Year’s Eve, or events run with another promoter.</p>
+      <p>One ball in the machine is gold, and it likes to hide at the bottom. Fish it out and crack it open: once a week there is a <b>golden ticket</b> inside, which puts you and a friend on the list for any ReSolute night. The rest of the time it holds something stranger.</p>
+      <p class="tiny">Not valid for events run with another promoter.</p>
     </div>
     <div>
       <h2>Your recent pulls</h2>
@@ -236,7 +236,7 @@ button,select,input{font:inherit;color:inherit}
   <div class="gt" id="gt" hidden>
     <div class="k">ReSolute · Admit two</div>
     <h3>Golden ticket</h3>
-    <p>It was in there. You and one friend are on the list for one regular ReSolute night of your choice.</p>
+    <p>It was in there. You and one friend are on the list for one ReSolute night of your choice.</p>
     <div class="code" id="gcode">RS-0000-0000</div>
     <div class="fine" id="gfine"></div>
     <form class="gform" id="gform" novalidate hidden>
@@ -472,7 +472,7 @@ function goldWin(){
 function showTicket(t){
   $('gbox').hidden=true;$('gt').hidden=false;$('gcode').textContent=t.code;
   var pend=!t.claimed&&!t.sample;
-  $('gfine').textContent=(t.name?t.name+' · ':'')+'Valid until '+day(t.validUntil)+' · Good for one night, two people · Not valid for Can You Jigit?, Why So Serious?, New Year’s Eve, or events run with another promoter.';
+  $('gfine').textContent=(t.name?t.name+' · ':'')+'Valid until '+day(t.validUntil)+' · Good for one night, two people · Not valid for events run with another promoter.';
   $('gform').hidden=!pend;$('gerr').textContent='';$('gclaim').disabled=false;
   $('ghow').textContent=t.sample?'Test ticket. Not valid.':pend?'Claim it within '+Math.max(1,Math.round((t.claimBy-Date.now())/6e4))+' minutes or it goes back in the machine.':(t.mailed===false?'We could not send the email. Screenshot this ticket and keep it safe.':'We emailed this ticket to '+t.email+'. Show it at the door.');
   (pend?$('gname'):$('gtclose')).focus();
