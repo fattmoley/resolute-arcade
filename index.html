@@ -248,7 +248,7 @@ button,select,input{font:inherit;color:inherit}
       <p class="src" id="psrc"></p>
       <h3 id="ptitle"></h3>
       <dl id="pmeta"></dl>
-      <div class="acts"><button class="again" id="again" type="button">Go again</button><a id="pphotos" class="photos" target="_blank" rel="noopener" hidden>Photos from this night ↗</a><a id="plink" target="_blank" rel="noopener" hidden></a></div>
+      <div class="acts"><button class="again" id="again" type="button">Go again</button><a id="pphotos" class="photos" target="_blank" rel="noopener" hidden>Photos from this night ↗︎</a><a id="plink" target="_blank" rel="noopener" hidden></a></div>
     </div>
   </div>
   <div class="goldbox" id="gbox" hidden>
@@ -464,7 +464,7 @@ function show(e,fromShelf){
   m.appendChild(row('When',e.d?when(e.d):'Date lost to the night'));
   m.appendChild(row('Where',[e.v||'Secret location',e.c].filter(Boolean).join(', ')));
   m.appendChild(row('Who',e.a&&e.a.length?e.a.join(', '):'Line-up kept quiet'));
-  var l=$('plink');if(e.u){l.href=e.u;l.textContent=e.s==='ra'?'Event on RA ↗':e.s==='fb'?'Event on Facebook ↗':'See the post ↗';l.hidden=false}else l.hidden=true;
+  var l=$('plink');if(e.u){l.href=e.u;l.textContent=e.s==='ra'?'Event on RA ↗︎':e.s==='fb'?'Event on Facebook ↗︎':'See the post ↗︎';l.hidden=false}else l.hidden=true;
   var al=album(e),ph2=$('pphotos');if(al){ph2.href=al.u;ph2.hidden=false}else ph2.hidden=true;
   $('prize').hidden=false;$('again').focus();
   if(!fromShelf){say('Out it comes',6000);beep(660,.09);setTimeout(function(){beep(880,.09)},90);setTimeout(function(){beep(1320,.18)},180)}
